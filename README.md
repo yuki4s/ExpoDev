@@ -26,3 +26,4 @@ Windows 11 + PowerShell 環境で以下の手順を実行
 
 5. RealSenseカメラを接続（ケーブルや端子の相性があり、複数試す必要があるかもしれない）
 
+6. Arduino IDE をインストール
