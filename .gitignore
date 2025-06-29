@@ -1,6 +1,9 @@
 # 仮想環境フォルダ（Python venv）
 VE/
 
+# ログファイル保存用フォルダ
+Log/
+
 # Pythonのキャッシュファイル
 __pycache__/
 *.pyc

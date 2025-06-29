@@ -45,5 +45,6 @@ Windows 11 + PowerShell 環境で以下の手順を実行
 
 
 # 注意事項
-- 仮想環境やPythonキャッシュは`.gitignore`で管理対象外に設定されている。
+- 実行時の`BlackBoard.py`のログデータは、`Log`フォルダ内に保存される。
+- 仮想環境や実行時のログデータ、キャッシュデータなどは`.gitignore`で管理対象外に設定されている。
 - プロジェクトは Conventional Commits および Git Flow ルールに従って管理されている。
