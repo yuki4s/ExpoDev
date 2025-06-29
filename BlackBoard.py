@@ -7,40 +7,68 @@ import msvcrt                                   # WindowsでESCキー検出用
 ###### ログ記録設定 #########
 
 import logging                                  # ログ出力用モジュール
-from datetime import datetime                   # タイムスタンプ用
 import os                                          # OS操作用
 import glob                                        # ファイル検索用
-import re                                          # 正規表現用
+import re                                          # 正規表現
+import json
 
-log_dir = "Log"                                    # ログフォルダ名
-os.makedirs(log_dir, exist_ok=True)               # ログフォルダがなければ作成
 
-# Logフォルダ内のlog*.logをすべて取得
-existing_logs = glob.glob(os.path.join(log_dir, "log*.log"))
+# --- ログ記録用関数 ---
+def initialize_blackboard_logging():
+    """
+    logging_config.json の設定に基づき、BlackBoard用ログをLog/BlackBoardLogに保存する。
+    保存しない設定なら、標準出力のみのロガーを構成する。
+    """
 
-max_index = 0                                     # ログ番号の最大値を初期化
-for log_file in existing_logs:
-    match = re.match(r".*log(\d+)\.log$", log_file)  # ファイル名から番号を抽出
-    if match:
-        idx = int(match.group(1))                 # 抽出した番号を整数に変換
-        if idx > max_index:
-            max_index = idx                      # 最大値を更新
+    # 設定ファイルからログ保存ON/OFFを読み込む
+    try:
+        with open("logging_config.json", "r", encoding="utf-8") as f:  # 設定ファイルを開く
+            config_data = json.load(f)  # JSONデータを辞書として読み込み
+        save_blackboard_logs = config_data.get("save_blackboard_logs", False)  # ログ保存ON/OFFを取得（デフォルトFalse）
+        print(f"[設定] save_blackboard_logs={save_blackboard_logs}")  # 設定内容をコンソールに出力
+    except Exception as e:  # 設定ファイルの読み込みで例外が発生した場合
+        print(f"[設定エラー] logging_config.json の読み込みに失敗しました: {e}")  # エラーメッセージを出力
+        save_blackboard_logs = False  # ログ保存はOFFに設定
 
-next_index = max_index + 1                       # 次のログ番号を決定
-log_filename = os.path.join(log_dir, f"log{next_index}.log")  # ファイル名作成
+    log_dir = os.path.join("Log", "BlackBoardLog")  # ログ保存ディレクトリのパスを作成
+    os.makedirs(log_dir, exist_ok=True)             # ディレクトリが無ければ作成する
 
-logging.basicConfig(                           # ログの基本設定
-    filename=log_filename,                     # ログファイル出力先
-    level=logging.INFO,                        # ログレベルINFO以上を出力
-    format='%(asctime)s [%(levelname)s] %(message)s',  # ログ出力フォーマット
-    datefmt='%Y-%m-%d %H:%M:%S'                # タイムスタンプ形式
-)
+    logger = logging.getLogger()  # ルートロガーを取得
+    logger.setLevel(logging.INFO)  # ログレベルをINFOに設定
 
-console_handler = logging.StreamHandler()      # コンソール出力用ハンドラ作成
-console_handler.setLevel(logging.INFO)         # INFO以上を表示
-formatter = logging.Formatter('%(asctime)s [%(levelname)s] %(message)s', '%Y-%m-%d %H:%M:%S')  # コンソールのフォーマット
-console_handler.setFormatter(formatter)        # ハンドラにフォーマットを設定
-logging.getLogger().addHandler(console_handler)  # ルートロガーにハンドラを追加
+    # ハンドラの重複追加防止
+    if logger.hasHandlers():  # すでにハンドラが追加されている場合
+        logger.handlers.clear()  # 古いハンドラを全て削除する
+
+    formatter = logging.Formatter('%(asctime)s [%(levelname)s] %(message)s', '%Y-%m-%d %H:%M:%S')  # ログ出力フォーマットを作成
+
+    # コンソール用ハンドラは常に追加
+    console_handler = logging.StreamHandler()  # コンソール出力用のハンドラを作成
+    console_handler.setLevel(logging.INFO)  # コンソール出力のログレベルをINFOに設定
+    console_handler.setFormatter(formatter)  # 出力フォーマットを設定
+    logger.addHandler(console_handler)  # コンソールハンドラをロガーに追加
+
+    if save_blackboard_logs:  # ログ保存がONの場合のみ
+        # 既存ログファイルを探索して最大番号を探す
+        existing_logs = glob.glob(os.path.join(log_dir, "log*_blackBoard.log"))  # 既存ログファイルを取得
+        max_index = 0  # 最大インデックスを初期化
+        for log_file in existing_logs:  # 既存ログを走査
+            match = re.match(r".*log(\d+)_blackBoard\.log$", log_file)  # ファイル名から番号を抽出
+            if match:
+                idx = int(match.group(1))  # 抽出した番号を整数に変換
+                if idx > max_index:  # 最大値を更新
+                    max_index = idx
+
+        next_index = max_index + 1  # 次に使うログ番号を決定
+        log_filename = os.path.join(log_dir, f"log{next_index}_blackBoard.log")  # 新しいログファイル名を作成
+        print(f"[ログ初期化] ログファイル: {log_filename}")  # ログファイル名をコンソールに表示
+
+        file_handler = logging.FileHandler(log_filename, encoding="utf-8")  # ファイル出力用ハンドラを作成
+        file_handler.setLevel(logging.INFO)  # ファイル出力のログレベルをINFOに設定
+        file_handler.setFormatter(formatter)  # 出力フォーマットを設定
+        logger.addHandler(file_handler)  # ファイルハンドラをロガーに追加
+
+
 
 ###### BlackBoard処理内容 #########
 
@@ -150,4 +178,5 @@ def start_server(host='localhost', port=9000):                 # サーバ起動
         server.close()                                         # サーバソケットを閉じる
 
 if __name__ == "__main__":                                    # スクリプトが直接実行されたときのみ
+    initialize_blackboard_logging()
     start_server()                                             # サーバ起動

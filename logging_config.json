@@ -1,3 +1,4 @@
 {
-    "save_video_logs": true
+    "save_video_logs": true,
+    "save_blackboard_logs": true
 }
