@@ -67,11 +67,11 @@ def initialize_video_logging():
             if idx > max_index:
                 max_index = idx
 
-    next_index = max_index + 1
-    print(f"[ログ初期化] 次のログ番号: {next_index}")
+    log_index = max_index   # RunAll.batで実行した際、先にBlackBoardのログファイルが作成されているためその番号を参照する
+    print(f"[ログ初期化] ログ番号: {log_index}")
 
-    color_video_filename = os.path.join(video_log_dir, f"log{next_index}_colorVideo.mp4")
-    depth_video_filename = os.path.join(video_log_dir, f"log{next_index}_depthVideo.mp4")
+    color_video_filename = os.path.join(video_log_dir, f"log{log_index}_colorVideo.mp4")
+    depth_video_filename = os.path.join(video_log_dir, f"log{log_index}_depthVideo.mp4")
 
     fourcc = cv2.VideoWriter_fourcc(*'mp4v')
     log_color_writer = cv2.VideoWriter(color_video_filename, fourcc, frame_rate, (frame_width, frame_height))
