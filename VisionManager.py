@@ -1,5 +1,3 @@
-# VisionManager.py
-
 import socket                                    # ソケット通信用ライブラリ
 import threading                                 # スレッド処理用ライブラリ
 import pyrealsense2 as rs                        # Intel RealSense用Pythonラッパー
@@ -31,8 +29,8 @@ def safe_wait_for_frames(pipeline, max_retries=5):  # フレーム取得をリ�
         try:
             return pipeline.wait_for_frames()       # フレームを取得
         except RuntimeError as e:
-            print(f"[警告] フレームの取得に失敗（{i+1}/{max_retries}）: {e}")
-            time.sleep(0.5)
+            print(f"[警告] フレームの取得に失敗（{i+1}/{max_retries}）: {e}")  # 取得失敗の警告
+            time.sleep(0.5)                         # 0.5秒待機してリトライ
     raise RuntimeError("フレーム取得に連続で失敗しました。")  # 最大リトライを超えた場合
 
 # --- BlackBoardからのコマンド受信用スレッド ---
@@ -101,7 +99,7 @@ def main():                                           # メインエントリポ
                 results = hands.process(image_rgb)                  # 手の検出
                 image.flags.writeable = True                        # 書き込みを再び許可
 
-                min_avg_depth = None                                # 最小平均深度格納用
+                min_depth_overall = None                            # 全手で最も近い深度値を格納用
 
                 if results.multi_hand_landmarks:                    # 手を検出した場合
                     for hand_landmarks in results.multi_hand_landmarks:
@@ -114,30 +112,35 @@ def main():                                           # メインエントリポ
 
                         depth_values = []                           # 各ランドマーク位置の深度を格納
                         h, w, _ = image.shape                       # 画像サイズ取得
-                        for lm in hand_landmarks.landmark:
+                        for idx, lm in enumerate(hand_landmarks.landmark):  # ランドマークごとにループ
                             cx, cy = int(lm.x * w), int(lm.y * h)   # ピクセル座標に変換
                             if 0 <= cx < w and 0 <= cy < h:
                                 d = depth_image[cy, cx]             # 深度値取得
                                 if d > 0:
-                                    depth_values.append(d)
+                                    depth_values.append(d)          # 有効な深度をリストに追加
+
+                                if idx == 4:  # 親指先端（LM4）の場合
+                                    print(f"[デバッグ] 親指先端の深度: {d} mm （座標: {cx}, {cy}）")  # 親指先端の深度表示
 
                         if depth_values:                            # 深度値が有効なら
-                            avg_depth = np.mean(depth_values)       # 平均深度計算
-                            if min_avg_depth is None or avg_depth < min_avg_depth:  # 最小平均深度更新
-                                min_avg_depth = avg_depth
+                            min_depth = np.min(depth_values)        # 最小深度計算
+                            if min_depth_overall is None or min_depth < min_depth_overall:  # 最小深度更新
+                                min_depth_overall = min_depth       # 最も近い深度を更新
 
-                            text = f"Avg. Depth: {avg_depth:.1f}mm"  # 表示用テキスト作成
-                            cx = int(np.mean([lm.x for lm in hand_landmarks.landmark]) * w)  # 手中心X
-                            cy = int(np.mean([lm.y for lm in hand_landmarks.landmark]) * h)  # 手中心Y
-                            cv2.putText(image, text, (cx - 70, cy - 50), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 255, 0), 2, cv2.LINE_AA)
+                            text = f"Min Depth: {min_depth:.1f}mm"  # 表示用テキスト作成
+                            center_x = int(np.mean([lm.x for lm in hand_landmarks.landmark]) * w)  # 手中心X
+                            center_y = int(np.mean([lm.y for lm in hand_landmarks.landmark]) * h)  # 手中心Y
+                            cv2.putText(image, text, (center_x - 70, center_y - 50),
+                                        cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 255, 0), 2, cv2.LINE_AA)
                         else:
-                            cv2.putText(image, "Avg. Depth: N/A", (50, 50), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2, cv2.LINE_AA)
+                            cv2.putText(image, "Min Depth: N/A", (50, 50),
+                                        cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2, cv2.LINE_AA)
 
-                if min_avg_depth is not None:                       # 最小平均深度が計算できたら
+                if min_depth_overall is not None:                   # 最小深度が計算できたら
                     try:
-                        message = f"BM;Depth:{min_avg_depth:.1f}"   # BM宛に深度値を送信
+                        message = f"BM;Depth:{min_depth_overall:.1f}"  # BM宛に最小深度を送信
                         s.sendall(message.encode())
-                        print(f"[送信] {message}")
+                        print(f"[送信] {message}")                  # 送信内容を表示
                     except Exception as e:
                         print(f"[送信エラー] {e}")
 
