@@ -1,5 +1,7 @@
 # VisionManager.py
 
+# 仮想環境の有効化 .\VE\Scripts\activate
+
 import socket                                    # ソケット通信用ライブラリ
 import threading                                 # スレッド処理用ライブラリ
 import pyrealsense2 as rs                        # Intel RealSense用Pythonラッパー
@@ -202,6 +204,30 @@ def main():                                           # メインエントリポ
                         print(f"[送信] {message}")                  # 送信内容を表示
                     except Exception as e:
                         print(f"[送信エラー] {e}")
+                
+
+                # --- 年月日と時刻を取得 ---
+                now = time.localtime()
+                datetime_text = time.strftime("%Y-%m-%d %H:%M:%S", now)
+
+                # --- カラー映像に日時を右上に表示 ---
+                font = cv2.FONT_HERSHEY_SIMPLEX
+                font_scale = 0.5
+                color = (255, 255, 255)  # 白
+                thickness = 1
+
+                (text_width, text_height), _ = cv2.getTextSize(datetime_text, font, font_scale, thickness)
+                x = image.shape[1] - text_width - 10  # 右端から10px左
+                y = 20  # 上端から20px下
+
+                cv2.putText(image, datetime_text, (x, y), font, font_scale, color, thickness, cv2.LINE_AA)
+
+                # --- 深度映像（カラーマップ）にも日時を右上に表示 ---
+                (depth_text_width, _), _ = cv2.getTextSize(datetime_text, font, font_scale, thickness)
+                depth_x = depth_colormap.shape[1] - depth_text_width - 10
+                depth_y = 20
+
+                cv2.putText(depth_colormap, datetime_text, (depth_x, depth_y), font, font_scale, color, thickness, cv2.LINE_AA)
 
                 # --- ここで映像ログ保存を行う ---
                 if SAVE_VIDEO_LOGS:                                # 設定ONなら
