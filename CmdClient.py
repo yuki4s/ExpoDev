@@ -1,6 +1,7 @@
 # CmdClient.py
 
 from tkinter import *                         # GUI作成用のtkinterライブラリをインポート
+from tkinter import messagebox
 import socket                                 # ソケット通信を行うための標準ライブラリ
 
 s = None                                     # グローバル変数: ソケットオブジェクト格納用
@@ -44,9 +45,16 @@ def start_pressed():                                        # Startボタンが�
     condition2_radio.config(state=DISABLED)                # 条件2ラジオボタンを無効化
     start_button.config(state=DISABLED, text="Started")    # スタートボタンを無効化＆テキスト変更
 
-# --- ESCキーによる強制終了 ---
-def handle_esc(event):                                     # ESCキー押下時の終了処理
-    root.destroy()                                         # GUIアプリケーションを終了
+# --- 全システム終了コマンド送信（確認付き） ---
+def send_exit_all_command():
+    confirm = messagebox.askyesno("確認", "本当にすべて終了してよいですか？\nこの操作は元に戻せません。")
+    if confirm:
+        send_command("CMD;shutdown")  # BlackBoardに全終了コマンドを送信
+        root.destroy()
+
+# --- ESCキーによる終了 ---
+def handle_esc(event):
+    send_exit_all_command()  # ESCキー押下時にも「Exit All」と同じ確認＆処理を行う
 
 # --- GUI 初期化 ---
 root = Tk()                                                # Tkinterのメインウィンドウ作成
@@ -71,6 +79,9 @@ start_button.pack(pady=5)
 
 reset_button = Button(root, text="Reset", command=send_reset_command, height=2, width=20)  # Resetボタン
 reset_button.pack(pady=5)
+
+exit_all_button = Button(root, text="Exit All", command=send_exit_all_command, height=2, width=20)
+exit_all_button.place(relx=1.0, rely=1.0, anchor="se", x=-8, y=-10)
 
 connection_status_label = Label(root, text="Not Connected")  # 接続状態を表示するラベル
 connection_status_label.pack(pady=10)

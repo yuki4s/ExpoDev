@@ -12,6 +12,7 @@ PORT = 9000                                       # BlackBoardサーバのポー
 CLIENT_NAME = 'BM'                                # このクライアントの名前（Behavior Manager）
 s = None                                          # ソケット接続オブジェクト
 arduino = None                                    # Arduino接続オブジェクト
+running = True                                    # プロセス稼働フラグ
 
 # --- Arduino接続処理（VID:PIDによる確実な識別） ---
 def connect_to_arduino():                         # Arduinoへ接続する関数
@@ -52,22 +53,28 @@ def start_arduino_receive_thread():                # Arduinoからのメッセ�
 
 # --- BlackBoardからのメッセージ受信処理 ---
 def receive_from_blackboard():                    # BlackBoardからのメッセージ受信処理
-    global s, arduino
+    global s, arduino, running
     while True:
         try:
             msg = s.recv(1024).decode().strip()   # BlackBoardからメッセージを受信しデコード
             if msg:
                 print(f"[BlackBoard→{CLIENT_NAME}] {msg}")  # 受信内容を表示
-                content = msg                     # メッセージ内容を抽出
-                print(f"[BM] コマンド抽出: {content}")
-                if arduino and arduino.is_open:   # Arduino接続確認
-                    try:
-                        arduino.write((content + '\n').encode())  # Arduinoへメッセージ送信
-                        print(f"[Arduinoへ送信] {content}")
-                    except Exception as e:
-                        print(f"[Arduino送信エラー] {e}")
+                
+                if msg == "EXIT":
+                    print("[BM] EXITコマンドを受信しました。終了します。")
+                    running = False
+                    break  # 受信用スレッドを終了
                 else:
-                    print("[Arduino] 未接続のため送信できません")  # Arduino未接続時の警告
+                    content = msg                     # メッセージ内容を抽出
+                    print(f"[BM] コマンド抽出: {content}")
+                    if arduino and arduino.is_open:   # Arduino接続確認
+                        try:
+                            arduino.write((content + '\n').encode())  # Arduinoへメッセージ送信
+                            print(f"[Arduinoへ送信] {content}")
+                        except Exception as e:
+                            print(f"[Arduino送信エラー] {e}")
+                    else:
+                        print("[Arduino] 未接続のため送信できません")  # Arduino未接続時の警告
         except Exception as e:
             print(f"[BM] 受信処理エラー: {e}")   # BlackBoard受信処理中の例外を表示
             break
@@ -94,7 +101,7 @@ def main():                                             # メインエントリ�
 
     print("[BM] 起動中。BlackBoardからのメッセージを待機しています...")
     try:
-        while True:
+        while running:
             time.sleep(1)                              # 常に動作を継続（スリープしながら待機）
     except KeyboardInterrupt:
         print("[BM] 終了要求を受け取りました。")        # Ctrl+Cなどで終了要求を受けた場合

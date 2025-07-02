@@ -76,6 +76,7 @@ clients = {}                                    # 接続中クライアントの
 server_running = True                           # サーバ実行中フラグ
 
 def handle_client(conn, addr):                  # クライアントごとの接続を処理する関数
+    global server_running
     name = None                                 # クライアント名を格納する変数
     try:
         init_msg = conn.recv(1024).decode().strip()  # 初回メッセージを受信しデコード
@@ -113,6 +114,18 @@ def handle_client(conn, addr):                  # クライアントごとの接
 
                 message = data.decode().strip()                # メッセージをデコード
                 logging.info(f"[受信] {name} → {message}")     # 受信内容をログ出力
+
+                # 追加: CMD;shutdown コマンドを検出して全体終了を実行
+                if message == "CMD;shutdown":
+                    logging.info("[CMD] CMD;shutdown を受信しました。全クライアントに終了指示を送信します。")
+                    for client_name, client_info in clients.items():
+                        try:
+                            client_info["conn"].sendall(b"EXIT")  # 各クライアントにEXITを送信
+                            logging.info(f"[CMD] {client_name} に EXIT を送信しました。")
+                        except Exception as e:
+                            logging.error(f"[CMD] {client_name} への終了送信に失敗: {e}")
+                    server_running = False  # サーバを終了する
+                    break  # 現在のクライアントループを終了
 
                 if ";" in message:                            # メッセージが';'を含むか確認
                     target_name, content = message.split(";", 1)  # 宛先名と内容に分割

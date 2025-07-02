@@ -2,6 +2,8 @@
 
 # 仮想環境の有効化 .\VE\Scripts\activate
 
+running = True  # VisionManager全体の稼働フラグ
+
 import socket                                    # ソケット通信用ライブラリ
 import threading                                 # スレッド処理用ライブラリ
 import pyrealsense2 as rs                        # Intel RealSense用Pythonラッパー
@@ -100,6 +102,12 @@ def receive_from_blackboard():                     # BlackBoardからのコマ�
             msg = s.recv(1024).decode()            # BlackBoardからデータ受信
             if msg:
                 print(f"[BlackBoard→VM] {msg}")   # 受信メッセージを表示
+                
+                # 終了用メッセージ
+                if msg.strip() == "EXIT":
+                    print("[終了指示] EXITコマンドを受信しました。VisionManagerを終了します。")
+                    running = False  # メインループを終了させる
+                    break
         except Exception:
             break                                  # エラー発生時はループを終了
 
