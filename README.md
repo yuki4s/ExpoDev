@@ -6,11 +6,12 @@ RGBDカメラ([Intel Realsense D435](https://www.intelrealsense.com/depth-camera
 
 Windows 11 + PowerShell 環境で以下の手順を実行
 
-1. このリポジトリをクローン.
+1. このリポジトリをクローン.    
+   ※ `Git`をインストールしていない場合は`ZIP`でダウンロードして解凍してください。
    ```
    git clone https://github.com/yuki4s/Expo.git
-   cd Expo
-   ```
+   cd クローン先ディレクトリ/Expo
+   ```    
 
 2. 仮想環境を作成.
    ```
@@ -44,7 +45,7 @@ Windows 11 + PowerShell 環境で以下の手順を実行
    - 実行する際は、スイッチを逆側にセットする.
 
 
-# 注意事項
+# 補足事項
 - `logging_config.json`で各種ログデータを保存するかどうかを設定できる. ログデータは`Log`フォルダ内に保存される.    
 - 仮想環境や実行時のログデータやキャッシュデータなどは`.gitignore`で管理対象外に設定されている.    
 - プロジェクトは Conventional Commits および Git Flow ルールに従って管理されている.
