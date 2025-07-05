@@ -7,13 +7,16 @@ cd /d %SCRIPT_DIR%
 :: /k は終了後もcmdウィンドウは開いたまま
 
 :: BlackBoard.py を新しいウィンドウで起動
-start cmd /c "call .\VE\Scripts\activate && python BlackBoard.py"
+start "BlackBoard" cmd /c "call .\VE\Scripts\activate && python BlackBoard.py"
 
-:: CmdClient.py を新しいウィンドウで起動
-start cmd /c "call .\VE\Scripts\activate && python CmdClient.py"
-
-:: VisionManager.py を新しいウィンドウで起動
-start cmd /c "call .\VE\Scripts\activate && python VisionManager.py"
+:: BlackBoardが安定するまで5秒待機
+timeout /t 3 /nobreak >nul
 
 :: BehaviorManager.py を新しいウィンドウで起動
-start cmd /c "call .\VE\Scripts\activate && python BehaviorManager.py"
+start "BehaviorManager" cmd /c "call .\VE\Scripts\activate && python BehaviorManager.py"
+
+:: VisionManager.py を新しいウィンドウで起動
+start "VisionManager" cmd /c "call .\VE\Scripts\activate && python VisionManager.py"
+
+:: CmdClient.py を新しいウィンドウで起動
+start  "CmdClient" cmd /c "call .\VE\Scripts\activate && python CmdClient.py"

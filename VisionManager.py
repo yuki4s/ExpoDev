@@ -96,7 +96,7 @@ def safe_wait_for_frames(pipeline, max_retries=5):  # フレーム取得をリ�
 
 # --- BlackBoardからのコマンド受信用スレッド ---
 def receive_from_blackboard():                     # BlackBoardからのコマンドを受信するスレッド
-    global s
+    global s, running
     while True:
         try:
             msg = s.recv(1024).decode()            # BlackBoardからデータ受信
@@ -106,8 +106,14 @@ def receive_from_blackboard():                     # BlackBoardからのコマ�
                 # 終了用メッセージ
                 if msg.strip() == "EXIT":
                     print("[終了指示] EXITコマンドを受信しました。VisionManagerを終了します。")
-                    running = False  # メインループを終了させる
+                    try:
+                        s.sendall(b"ACK;EXIT_RECEIVED")      # ←ACKをBlackBoardへ送信
+                        print("[ACK送信] EXIT受領確認を送信しました。")
+                    except Exception as e:
+                        print(f"[ACK送信失敗] {e}")
+                    running = False                          # メインループ終了指示
                     break
+
         except Exception:
             break                                  # エラー発生時はループを終了
 
@@ -147,7 +153,7 @@ def main():                                           # メインエントリポ
             min_tracking_confidence=0.5,
             max_num_hands=2) as hands:
 
-            while True:                             # メインループ開始
+            while running:                           # runningフラグでメインループを制御
                 try:
                     frames = safe_wait_for_frames(pipeline)  # フレーム取得
                 except RuntimeError as e:
