@@ -21,10 +21,12 @@ try:
     with open("logging_config.json", "r", encoding="utf-8") as f:
         config_data = json.load(f)
     SAVE_VIDEO_LOGS = config_data.get("save_video_logs", False)  # 設定が無ければFalse
-    print(f"[設定] SAVE_VIDEO_LOGS={SAVE_VIDEO_LOGS}")
+    SAVE_HANDLANDMARK_LOGS = config_data.get("save_handLandmark_logs", False) # 設定が無ければFalse
+    print(f"[設定] SAVE_VIDEO_LOGS={SAVE_VIDEO_LOGS}, SAVE_HANDLANDMARK_LOGS={SAVE_HANDLANDMARK_LOGS}")
 except Exception as e:
     print(f"[設定エラー] logging_config.json の読み込みに失敗しました: {e}")
     SAVE_VIDEO_LOGS = False
+    SAVE_HANDLANDMARK_LOGS = False
 
 # --- BlackBoard通信設定 ---
 HOST = 'localhost'                              # BlackBoardサーバホスト
@@ -84,6 +86,57 @@ def initialize_video_logging():
     return log_color_writer, log_depth_writer
 
 
+
+# --- フレームごとの手ランドマークデータ記録関数 ---
+frame_logs = []  # フレームごとのランドマークログを蓄積するリスト
+def record_frame_data(frame_idx, timestamp, hands_data, processing_time_ms):
+    """
+    フレームごとの手ランドマーク情報を辞書形式でframe_logsに追加する
+    """
+    frame_log = {
+        "frame_index": frame_idx,
+        "timestamp": timestamp,
+        "image_resolution": {"width": frame_width, "height": frame_height},
+        "processing_time_ms": processing_time_ms,
+        "hands": hands_data
+    }
+    frame_logs.append(frame_log)
+
+
+# --- ログファイル保存関数 ---
+def save_all_frame_logs():
+    """
+    frame_logsに溜めたデータを1つのJSONファイルとして保存する
+    """
+    if not SAVE_HANDLANDMARK_LOGS or not frame_logs:
+        return
+    
+    landmark_log_dir = "Log/HandLandmarkLog"  # 手ランドマーク保存のディレクトリ
+    os.makedirs(landmark_log_dir, exist_ok=True)
+    
+    # BlackBoardログ番号に合わせたファイル名を生成
+    blackboard_log_dir = "Log/BlackBoardLog"
+    existing_logs = glob.glob(os.path.join(blackboard_log_dir, "log*_blackBoard.log"))
+    max_index = 0
+    for log_file in existing_logs:
+        match = re.match(r".*log(\d+)_blackBoard\.log$", log_file)
+        if match:
+            idx = int(match.group(1))
+            if idx > max_index:
+                max_index = idx
+    
+    log_index = max_index
+    landmark_log_filename = os.path.join(landmark_log_dir, f"log{log_index}_handLandmarks.json")
+    try:
+        with open(landmark_log_filename, "w", encoding="utf-8") as f:
+            json.dump(frame_logs, f, indent=2, ensure_ascii=False)
+        print(f"[保存] 手ランドマークログを保存しました: {landmark_log_filename}")
+    except Exception as e:
+        print(f"[保存エラー] 手ランドマークログ保存中に例外発生: {e}")
+
+
+
+
 # --- フレーム取得関数 ---
 def safe_wait_for_frames(pipeline, max_retries=5):  # フレーム取得をリトライ付きで行う関数
     for i in range(max_retries):
@@ -136,6 +189,8 @@ def connect_to_blackboard():                      # BlackBoardサーバへ接続
 def main():                                           # メインエントリポイント
     connect_to_blackboard()                          # BlackBoardへ接続
 
+    start_time = time.time()  # 処理開始時刻
+
     log_color_writer, log_depth_writer = initialize_video_logging()  # ログ用VideoWriterを初期化
 
     print("RealSense カメラを起動中...")
@@ -152,6 +207,8 @@ def main():                                           # メインエントリポ
             min_detection_confidence=0.5,
             min_tracking_confidence=0.5,
             max_num_hands=2) as hands:
+
+            frame_idx = 0   # フレームカウンタ
 
             while running:                           # runningフラグでメインループを制御
                 try:
@@ -248,6 +305,39 @@ def main():                                           # メインエントリポ
                     log_color_writer.write(image)                      # カラー映像保存
                     log_depth_writer.write(depth_colormap)             # 深度映像保存
 
+                # --- 手ランドマークのログ設定が有効な場合のみ記録を行う ---
+                if SAVE_HANDLANDMARK_LOGS:  # ログ設定が有効な場合のみ処理を行う
+                    frame_timestamp = time.strftime("%Y-%m-%dT%H:%M:%S", time.localtime())  # フレーム処理時点の日時をISO形式で取得
+                    hands_data = []  # このフレームで検出した手の情報を格納するリストを初期化
+                    if results.multi_hand_landmarks and results.multi_handedness:  # 手のランドマークと左右判定が検出されているか確認
+                        for i, (hand_landmarks, handedness) in enumerate(zip(results.multi_hand_landmarks, results.multi_handedness)):  # 検出した各手に対してループ
+                            single_hand_data = {  # 1つの手のデータを格納する辞書を作成
+                                "hand_id": i,  # 手のID（フレーム内での順序）
+                                "handedness": handedness.classification[0].label,  # 左右判定（"Left" or "Right"）
+                                "hand_confidence": handedness.classification[0].score,  # 左右判定の信頼度スコア
+                                "min_depth": min_depth_overall if min_depth_overall is not None else None,  # フレーム全体での最小深度
+                                "landmarks": []  # 各ランドマーク情報を格納するリスト
+                            }
+                            h, w, _ = image.shape  # 画像の高さ・幅を取得
+                            for idx, lm in enumerate(hand_landmarks.landmark):  # 各ランドマークについてループ
+                                cx, cy = int(lm.x * w), int(lm.y * h)  # ランドマークのx,y座標を画像上のピクセル座標に変換
+                                if 0 <= cx < w and 0 <= cy < h:  # 座標が画像内にあるか確認
+                                    d = depth_image[cy, cx]  # 対応する位置の深度値を取得
+                                    landmark_info = {  # ランドマーク1点の情報を辞書で作成
+                                        "landmark_id": idx,  # ランドマークのID
+                                        "pixel_x": cx,  # ピクセルx座標
+                                        "pixel_y": cy,  # ピクセルy座標
+                                        "depth": float(d) if d > 0 else None  # 深度値（有効ならfloatで記録、無効ならNone）
+                                    }
+                                    single_hand_data["landmarks"].append(landmark_info)  # ランドマーク情報を手のデータに追加
+                            hands_data.append(single_hand_data)  # この手の情報をフレームのデータに追加
+                    
+                    elapsed_ms = (time.time() - start_time) * 1000  # フレーム処理にかかった時間をミリ秒単位で計算
+                    record_frame_data(frame_idx, frame_timestamp, hands_data, elapsed_ms)  # 1フレーム分のデータを記録用に保存
+
+                frame_idx += 1  # フレーム番号をインクリメント
+
+                # --- 描画結果を表示 ---
                 cv2.imshow('RealSense D415 with MediaPipe Hands (Color)', image)         # カラー映像表示
                 cv2.imshow('RealSense D415 Depth', depth_colormap)                      # 深度映像表示
 
@@ -258,6 +348,9 @@ def main():                                           # メインエントリポ
         print("RealSense カメラを停止中...")
         pipeline.stop()                         # RealSenseパイプライン停止
         print("RealSense カメラが停止しました。")
+
+        save_all_frame_logs()  # ← フレームごとに蓄積した手ランドマークログをJSONファイルに保存する
+
         cv2.destroyAllWindows()                 # 全OpenCVウィンドウを閉じる
         if s:
             s.close()                           # BlackBoard接続を閉じる
