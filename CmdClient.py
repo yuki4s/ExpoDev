@@ -44,7 +44,7 @@ def receive_from_blackboard():                                # BlackBoardから
 def send_command(command):                                   # コマンドをBlackBoardへ送信する関数
     if s:
         try:
-            s.send(command.encode())                         # コマンド送信
+            s.send((command + "\n").encode())                # 改行区切りを明示してコマンド送信
             response_label.config(text=f"Sent: {command}")   # GUIに送信結果を表示
         except Exception as e:
             response_label.config(text=f"[エラー] 送信失敗: {e}")  # 送信エラーをGUIに表示
@@ -52,6 +52,7 @@ def send_command(command):                                   # コマンドをBl
 def send_reset_command():                                   # リセット用コマンドを送信
     send_command("BM;reset")                                # BM宛にresetを送信
     send_command("VM;reset")                                # VM宛にresetを送信
+    send_command("VM;save_logging")
     user_id_menu.config(state=NORMAL)                      # GUIのID選択を再度有効化
     condition1_radio.config(state=NORMAL)                  # 条件1を有効化
     condition2_radio.config(state=NORMAL)                  # 条件2を有効化
@@ -65,6 +66,8 @@ def start_pressed():                                       # Startボタン押�
     # VM宛にID,条件を含むコマンドを送信
     vm_command = f"VM;ID:{user_id.get()},Cond:{condition.get()}"
     send_command(vm_command)
+
+    send_command("VM;start_logging")
 
     user_id_menu.config(state=DISABLED)                   # ID選択を無効化
     condition1_radio.config(state=DISABLED)               # 条件1を無効化

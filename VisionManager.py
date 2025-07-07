@@ -69,7 +69,7 @@ config = rs.config()                          # RealSense用設定オブジェ�
 config.enable_stream(rs.stream.color, frame_width, frame_height, rs.format.bgr8, frame_rate)  # カラーストリーム設定
 config.enable_stream(rs.stream.depth, frame_width, frame_height, rs.format.z16, frame_rate)   # 深度ストリーム設定
 
-# --- 映像ログ記録用関数 ---
+# --- 動画ログ記録用関数 ---
 def initialize_video_logging():
     """
     BlackBoardログ番号に合わせてカラー/深度のビデオログファイルを用意し、
@@ -145,15 +145,24 @@ def safe_wait_for_frames(pipeline, max_retries=5):  # フレーム取得をリ�
 
 # --- BlackBoardからのコマンド受信用スレッド ---
 def receive_from_blackboard():                     # BlackBoardからのコマンドを受信するスレッド
-    global s, running, recording_active, log_color_writer, log_depth_writer
+    global s, running, recording_active, log_color_writer, log_depth_writer, experiment_info
+
     while True:                                    # 無限ループで受信を監視
         try:
             msg = s.recv(1024).decode()            # BlackBoardからデータを受信
+            msg = msg.strip()                        # 前後の空白や改行を除去
+            
             if msg:
+
+                """ Debug
+                print(f"[BlackBoard→VM] 受信raw: {repr(msg)}")  # まず生データを確認
+                msg_clean = msg.strip()                        # 前後の空白や改行を除去
+                print(f"[BlackBoard→VM] 受信clean: {repr(msg_clean)}")
+                """
                 print(f"[BlackBoard→VM] {msg}")   # 受信したメッセージを表示
 
                 # 受信メッセージに応じた処理
-                if msg.startswith("ID:") and "Cond:" in msg:    # 被験者IDと実験条件を受信した場合
+                if "ID:" in msg and "Cond:" in msg:   # 被験者IDと実験条件を受信した場合
                     try:
                         parts = [p.strip() for p in msg.split(",")]
                         experiment_info = {}
@@ -165,18 +174,30 @@ def receive_from_blackboard():                     # BlackBoardからのコマ�
                         print(f"[解析エラー] ID/条件情報の解析に失敗しました: {e}")
                 
                 elif msg == "start_logging":
-                    frame_logs.clear()
-                    log_color_writer, log_depth_writer = initialize_video_logging()
+                    # 動画ログ記録開始
+                    if SAVE_VIDEO_LOGS:
+                        log_color_writer, log_depth_writer = initialize_video_logging()
+                    
+                    # ランドマークログ記録開始
+                    if SAVE_HANDLANDMARK_LOGS:
+                        frame_logs.clear()
+                    
                     recording_active = True
                     print("[LOGGING] ログの記録を開始します")
                     print(f"[LOGGING] ログ保存設定 === 映像:{SAVE_VIDEO_LOGS}, 手のランドマーク:{SAVE_HANDLANDMARK_LOGS}")
 
                 elif msg == "save_logging":
-                    save_all_frame_logs()
+                    print("[DEBUG] save_loggingコマンドを受信し、条件分岐に入りました。")
+
+                    # 動画ログ保存
                     if SAVE_VIDEO_LOGS and log_color_writer is not None:
                         log_color_writer.release()
                     if SAVE_VIDEO_LOGS and log_depth_writer is not None:
                         log_depth_writer.release()
+
+                    # ランドマークログ保存
+                    if SAVE_HANDLANDMARK_LOGS:
+                        save_all_frame_logs()
                     recording_active = False
                     print("[LOGGING] ログの記録を終了します")
                     print(f"[LOGGING] ログ保存設定 === 映像:{SAVE_VIDEO_LOGS}, 手のランドマーク:{SAVE_HANDLANDMARK_LOGS}")
@@ -255,11 +276,11 @@ def extract_all_hands_landmarks(results, depth_image, image_shape):
 
 # --- メイン処理 ---
 def main():                                           # メイン関数（プログラムのエントリポイント）
+    global recording_active
+
     connect_to_blackboard()                          # BlackBoardに接続し、受信用スレッドを開始する
 
-    start_time = time.time()                         # メイン処理開始時刻を記録する
-
-    log_color_writer, log_depth_writer = initialize_video_logging()  # ログ用のVideoWriterを初期化する
+    # start_time = time.time()                         # メイン処理開始時刻を記録する
 
     print("RealSense カメラを起動中...")
     try:
@@ -378,6 +399,17 @@ def main():                                           # メイン関数（プロ
 
     finally:
         print("RealSense カメラを停止中...")
+        
+        if recording_active:
+            print("[LOGGING] プログラム終了時にログを保存します。")
+            if SAVE_VIDEO_LOGS and log_color_writer is not None:
+                log_color_writer.release()
+            if SAVE_VIDEO_LOGS and log_depth_writer is not None:
+                log_depth_writer.release()
+            if SAVE_HANDLANDMARK_LOGS:
+                save_all_frame_logs()
+            recording_active = False
+
         pipeline.stop()                         # RealSenseパイプラインを停止する
         print("RealSense カメラが停止しました。")
 

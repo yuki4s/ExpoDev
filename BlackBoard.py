@@ -116,37 +116,47 @@ def handle_client(conn, addr):                        # クライアント接続
         logging.info(f"[接続] {name} ({reported_ip}:{reported_port}) が接続しました")
         clients[name] = { "conn": conn, "ip": reported_ip, "port": reported_port }  # クライアントを登録
 
+        buffer = ""
         while server_running:                            # サーバ稼働中ループ
             try:
                 data = conn.recv(1024)                   # クライアントからデータ受信
                 if not data: break                      # データが空なら切断扱い
-                message = data.decode().strip()         # デコードしてメッセージ取得
-                logging.info(f"[受信] {name} → {message}")
 
-                if message == "CMD;shutdown":           # CMD;shutdown受信時
-                    logging.info("[CMD] CMD;shutdown を受信しました。全クライアントに終了指示を送信します。")
-                    send_exit_to_all_clients()          # 全クライアントにEXIT送信＆ACK確認
-                    server_running = False              # すべて完了後にサーバ停止
-                    break                               # クライアントループ終了
+                buffer += data.decode()                  # 新しく受信したデータをbufferに追加する
 
-                elif message.startswith("ACK;EXIT_RECEIVED"):  # クライアントからのEXIT ACK
-                    logging.info(f"[ACK受信] {name} からEXIT受領確認を受信しました。")
-                    exit_acks_received.add(name)
+                while "\n" in buffer:                                    # バッファ内に改行文字が含まれている間ループを続ける
+                    message, buffer = buffer.split("\n", 1)              # 改行でバッファを分割し、1つ目をメッセージ、残りをバッファとして更新する
+                    message = message.strip()                            # メッセージ先頭・末尾の不要な空白文字を除去する
+                    if not message:                                      # メッセージが空文字の場合
+                        continue                                         # 次のループにスキップして処理を続ける
 
-                elif ";" in message:                    # メッセージが;を含む場合は転送
-                    target_name, content = message.split(";", 1)  # 宛先と内容を分割
-                    target = clients.get(target_name)   # 宛先を取得
-                    if target:
-                        target["conn"].sendall(content.encode())  # 宛先に転送
-                        logging.info(f"[転送] {name} → {target_name} : {content}")
+                    logging.info(f"[受信] {name} → {message}")
+
+                    if message == "CMD;shutdown":           # CMD;shutdown受信時
+                        logging.info("[CMD] CMD;shutdown を受信しました。全クライアントに終了指示を送信します。")
+                        send_exit_to_all_clients()          # 全クライアントにEXIT送信＆ACK確認
+                        server_running = False              # すべて完了後にサーバ停止
+                        break                               # クライアントループ終了
+
+                    elif message.startswith("ACK;EXIT_RECEIVED"):  # クライアントからのEXIT ACK
+                        logging.info(f"[ACK受信] {name} からEXIT受領確認を受信しました。")
+                        exit_acks_received.add(name)
+
+                    elif ";" in message:                    # メッセージが;を含む場合は転送
+                        target_name, content = message.split(";", 1)  # 宛先と内容を分割
+                        target = clients.get(target_name)   # 宛先を取得
+                        if target:
+                            target["conn"].sendall((content + "\n").encode())  # 宛先に改行付で転送
+                            logging.info(f"[転送] {name} → {target_name} : {content}")
+                        else:
+                            err_msg = f"[エラー] 宛先 '{target_name}' が見つかりません"
+                            conn.sendall((err_msg + "\n").encode())
+                            logging.error(err_msg)
                     else:
-                        err_msg = f"[エラー] 宛先 '{target_name}' が見つかりません"
+                        err_msg = "[エラー] メッセージは '宛先名;内容' の形式で送信してください"
                         conn.sendall(err_msg.encode())
                         logging.error(err_msg)
-                else:
-                    err_msg = "[エラー] メッセージは '宛先名;内容' の形式で送信してください"
-                    conn.sendall(err_msg.encode())
-                    logging.error(err_msg)
+                        
             except Exception as e:
                 logging.error(f"[エラー] 受信中に例外発生：{e}")
                 break
