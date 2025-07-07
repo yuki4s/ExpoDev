@@ -51,14 +51,21 @@ def send_command(command):                                   # コマンドをBl
 
 def send_reset_command():                                   # リセット用コマンドを送信
     send_command("BM;reset")                                # BM宛にresetを送信
+    send_command("VM;reset")                                # VM宛にresetを送信
     user_id_menu.config(state=NORMAL)                      # GUIのID選択を再度有効化
     condition1_radio.config(state=NORMAL)                  # 条件1を有効化
     condition2_radio.config(state=NORMAL)                  # 条件2を有効化
     start_button.config(state=NORMAL, text="Start")        # スタートボタンを有効化
 
 def start_pressed():                                       # Startボタン押下時の処理
-    am_command = f"BM;ID:{user_id.get()},Cond:{condition.get()}"  # BM宛にID,条件を含むコマンドを作成
-    send_command(am_command)                              # コマンド送信
+    # BM宛にID,条件を含むコマンドを送信
+    bm_command = f"BM;ID:{user_id.get()},Cond:{condition.get()}"
+    send_command(bm_command)
+
+    # VM宛にID,条件を含むコマンドを送信
+    vm_command = f"VM;ID:{user_id.get()},Cond:{condition.get()}"
+    send_command(vm_command)
+
     user_id_menu.config(state=DISABLED)                   # ID選択を無効化
     condition1_radio.config(state=DISABLED)               # 条件1を無効化
     condition2_radio.config(state=DISABLED)               # 条件2を無効化

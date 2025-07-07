@@ -62,7 +62,7 @@ def initialize_blackboard_logging():
         file_handler.setFormatter(formatter)             # フォーマット適用
         logger.addHandler(file_handler)                  # ハンドラ追加
 
-###### BlackBoard処理内容 #########
+###### ---BlackBoard処理内容--- #########
 
 clients = {}                                            # 接続中クライアントを格納する辞書
 server_running = True                                   # サーバ実行フラグ

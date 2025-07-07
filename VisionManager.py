@@ -28,15 +28,32 @@ except Exception as e:
     SAVE_VIDEO_LOGS = False                                       # 設定失敗時はFalseに設定
     SAVE_HANDLANDMARK_LOGS = False                               # 設定失敗時はFalseに設定
 
+# --- BlackBoardログ番号の最大値を取得する関数 ---
+def get_blackboard_log_index():
+    """
+    BlackBoardログディレクトリ内の最新ログ番号を取得する
+    ログがなければ0を返す
+    """
+    blackboard_log_dir = "Log/BlackBoardLog"
+    existing_logs = glob.glob(os.path.join(blackboard_log_dir, "log*_blackBoard.log"))
+    max_index = 0
+    for log_file in existing_logs:
+        match = re.match(r".*log(\d+)_blackBoard\.log$", log_file)
+        if match:
+            idx = int(match.group(1))
+            if idx > max_index:
+                max_index = idx
+    return max_index
+
 # --- BlackBoard通信設定 ---
 HOST = 'localhost'                              # BlackBoardサーバのホストアドレス
 PORT = 9000                                     # BlackBoardサーバのポート番号
 CLIENT_NAME = 'VM'                              # クライアント名を設定（VisionManagerを意味する）
 s = None                                        # ソケット接続オブジェクトの初期化
+experiment_info = {}                            # 実験ID・条件を格納するグローバル変数を初期化
+recording_active = False                        # ログ記録がアクティブ状態:Startコマンド受信でTrue,Resetコマンド受信でFalseにする
 
 # --- 解像度・フレームレート設定 ---
-#frame_width = 640          # （コメントアウト）横解像度
-#frame_height = 480         # （コメントアウト）縦解像度
 frame_width = 1280                                # 横解像度を1280ピクセルに設定
 frame_height = 720                                # 縦解像度を720ピクセルに設定
 frame_rate = 30                                   # フレームレートを30FPSに設定
@@ -58,27 +75,16 @@ def initialize_video_logging():
     BlackBoardログ番号に合わせてカラー/深度のビデオログファイルを用意し、
     OpenCVのVideoWriterを返す。
     """
-    blackboard_log_dir = "Log/BlackBoardLog"           # BlackBoardログ保存ディレクトリ
     video_log_dir = "Log/VideoLog"                     # 映像ログ保存ディレクトリ
-
-    os.makedirs(blackboard_log_dir, exist_ok=True)     # ログフォルダが存在しない場合は作成
     os.makedirs(video_log_dir, exist_ok=True)          # 映像ログフォルダが存在しない場合は作成
 
-    existing_logs = glob.glob(os.path.join(blackboard_log_dir, "log*_blackBoard.log"))  # 既存BlackBoardログを検索
-
-    max_index = 0                                      # 最大ログ番号の初期値
-    for log_file in existing_logs:                     # 既存ログを走査
-        match = re.match(r".*log(\d+)_blackBoard\.log$", log_file)  # ログ番号を正規表現で抽出
-        if match:
-            idx = int(match.group(1))                  # ログ番号を整数に変換
-            if idx > max_index:                        # 最大値を更新
-                max_index = idx
-
-    log_index = max_index                              # RunAll.bat実行時、先に作成されるBlackBoardログ番号を基準にする
-    print(f"[ログ初期化] ログ番号: {log_index}")
-
-    color_video_filename = os.path.join(video_log_dir, f"log{log_index}_colorVideo.mp4")  # カラーログファイル名
-    depth_video_filename = os.path.join(video_log_dir, f"log{log_index}_depthVideo.mp4")  # 深度ログファイル名
+    # 出力ファイル名生成
+    log_index = get_blackboard_log_index()             # RunAll.bat実行時、先に作成されるBlackBoardログ番号を基準にする
+    user_id = experiment_info.get("ID", "unknown")     # 被験者ID
+    cond = experiment_info.get("Cond", "unknown")      # 実験条件番号
+    
+    color_video_filename = os.path.join(video_log_dir, f"log{log_index}_ID{user_id}_Cond{cond}_colorVideo.mp4")  # カラーログファイル名
+    depth_video_filename = os.path.join(video_log_dir, f"log{log_index}_ID{user_id}_Cond{cond}_depthVideo.mp4")  # 深度ログファイル名
 
     fourcc = cv2.VideoWriter_fourcc(*'mp4v')           # MP4形式用のコーデックを取得
     log_color_writer = cv2.VideoWriter(color_video_filename, fourcc, frame_rate, (frame_width, frame_height))  # カラー映像用VideoWriter
@@ -88,7 +94,7 @@ def initialize_video_logging():
 
 # --- フレームごとの手ランドマークデータ記録関数 ---
 frame_logs = []  # フレームごとのランドマークログを蓄積するリスト
-def record_frame_data(frame_idx, timestamp, hands_data, processing_time_ms):
+def record_frame_data(frame_idx, timestamp, hands_data):
     """
     フレームごとの手ランドマーク情報を辞書形式でframe_logsに追加する。
     """
@@ -105,26 +111,17 @@ def save_all_frame_logs():
     frame_logsに蓄積した全データをJSONファイルとして保存する。
     ログ形式は最上位に解像度情報、次にフレームごとのデータを格納する。
     """
-    if not SAVE_HANDLANDMARK_LOGS or not frame_logs:  # ログ設定が無効またはデータ無しなら終了
-        return
-
     landmark_log_dir = "Log/HandLandmarkLog"          # 手ランドマークログ保存用ディレクトリ
     os.makedirs(landmark_log_dir, exist_ok=True)      # フォルダがなければ作成
 
-    blackboard_log_dir = "Log/BlackBoardLog"          # BlackBoardログディレクトリ
-    existing_logs = glob.glob(os.path.join(blackboard_log_dir, "log*_blackBoard.log"))  # ログファイル検索
-    max_index = 0
-    for log_file in existing_logs:
-        match = re.match(r".*log(\d+)_blackBoard\.log$", log_file)  # ログ番号を抽出
-        if match:
-            idx = int(match.group(1))
-            if idx > max_index:
-                max_index = idx
-
-    log_index = max_index                             # BlackBoardログ番号に合わせる
-    landmark_log_filename = os.path.join(landmark_log_dir, f"log{log_index}_handLandmarks.json")  # 出力ファイル名生成
+    # 出力ファイル名生成
+    log_index = get_blackboard_log_index()             # RunAll.bat実行時、先に作成されるBlackBoardログ番号を基準にする
+    user_id = experiment_info.get("ID", "unknown")      # 被験者ID
+    cond = experiment_info.get("Cond", "unknown")       # 実験条件番号
+    landmark_log_filename = os.path.join(landmark_log_dir, f"log{log_index}_ID{user_id}_Cond{cond}_handLandmarks.json")
 
     logs_to_save = {                                  # ログデータ構造を作成
+        "experiment_info": experiment_info,
         "image_resolution": {"width": frame_width, "height": frame_height},  # 解像度情報
         "frames": frame_logs                         # フレームごとのデータ
     }
@@ -148,14 +145,43 @@ def safe_wait_for_frames(pipeline, max_retries=5):  # フレーム取得をリ�
 
 # --- BlackBoardからのコマンド受信用スレッド ---
 def receive_from_blackboard():                     # BlackBoardからのコマンドを受信するスレッド
-    global s, running
+    global s, running, recording_active, log_color_writer, log_depth_writer
     while True:                                    # 無限ループで受信を監視
         try:
             msg = s.recv(1024).decode()            # BlackBoardからデータを受信
             if msg:
                 print(f"[BlackBoard→VM] {msg}")   # 受信したメッセージを表示
 
-                if msg.strip() == "EXIT":          # EXITコマンドが届いた場合
+                # 受信メッセージに応じた処理
+                if msg.startswith("ID:") and "Cond:" in msg:    # 被験者IDと実験条件を受信した場合
+                    try:
+                        parts = [p.strip() for p in msg.split(",")]
+                        experiment_info = {}
+                        for part in parts:
+                            k, v = part.split(":")
+                            experiment_info[k.strip()] = v.strip()
+                        print(f"[INFO] Experiment info updated: {experiment_info}")
+                    except Exception as e:
+                        print(f"[解析エラー] ID/条件情報の解析に失敗しました: {e}")
+                
+                elif msg == "start_logging":
+                    frame_logs.clear()
+                    log_color_writer, log_depth_writer = initialize_video_logging()
+                    recording_active = True
+                    print("[LOGGING] ログの記録を開始します")
+                    print(f"[LOGGING] ログ保存設定 === 映像:{SAVE_VIDEO_LOGS}, 手のランドマーク:{SAVE_HANDLANDMARK_LOGS}")
+
+                elif msg == "save_logging":
+                    save_all_frame_logs()
+                    if SAVE_VIDEO_LOGS and log_color_writer is not None:
+                        log_color_writer.release()
+                    if SAVE_VIDEO_LOGS and log_depth_writer is not None:
+                        log_depth_writer.release()
+                    recording_active = False
+                    print("[LOGGING] ログの記録を終了します")
+                    print(f"[LOGGING] ログ保存設定 === 映像:{SAVE_VIDEO_LOGS}, 手のランドマーク:{SAVE_HANDLANDMARK_LOGS}")
+
+                elif msg.strip() == "EXIT":          # EXITコマンドが届いた場合
                     print("[終了指示] EXITコマンドを受信しました。VisionManagerを終了します。")
                     try:
                         s.sendall(b"ACK;EXIT_RECEIVED")      # EXIT受領確認のACKを送信
@@ -312,9 +338,10 @@ def main():                                           # メイン関数（プロ
                             cv2.putText(image, "Min Depth: N/A", (50, 50),
                                     cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2, cv2.LINE_AA)
 
-                # --- 現在日時を文字列化 ---
-                now = time.localtime()
-                datetime_text = time.strftime("%Y-%m-%d %H:%M:%S", now)
+                # 現在のISO形式でフレームタイムスタンプを作成
+                frame_timestamp = time.strftime("%Y-%m-%dT%H:%M:%S", time.localtime())
+                # 表示用テキストはTを空白に置換して人間が読みやすい形式に
+                datetime_text = frame_timestamp.replace("T", " ")
 
                 # --- カラー映像に日時を右上に描画 ---
                 font = cv2.FONT_HERSHEY_SIMPLEX
@@ -332,16 +359,13 @@ def main():                                           # メイン関数（プロ
                 cv2.putText(image, frame_text, (image.shape[1]-frame_text_width-10, 45),  # 右上に表示（日時の少し下）
                             font, font_scale, color, thickness, cv2.LINE_AA)
 
-                # --- 映像ログ保存 ---
-                if SAVE_VIDEO_LOGS:
-                    log_color_writer.write(image)                      # カラー映像を保存
-                    log_depth_writer.write(depth_colormap)             # 深度映像を保存
-
-                # --- 手ランドマークのログ保存 ---
-                if SAVE_HANDLANDMARK_LOGS:
-                    frame_timestamp = time.strftime("%Y-%m-%dT%H:%M:%S", time.localtime())  # ISO形式の時刻文字列
-                    elapsed_ms = (time.time() - start_time) * 1000      # 処理開始からの経過時間を計算
-                    record_frame_data(frame_idx, frame_timestamp, hands_data, elapsed_ms)  # フレーム情報を記録
+                # --- ログ記録 ---
+                if recording_active:
+                    if SAVE_VIDEO_LOGS:
+                        log_color_writer.write(image)
+                        log_depth_writer.write(depth_colormap)
+                    if SAVE_HANDLANDMARK_LOGS:
+                        record_frame_data(frame_idx, frame_timestamp, hands_data)  # フレーム情報を記録
 
                 frame_idx += 1  # フレーム番号を更新
 
@@ -356,8 +380,6 @@ def main():                                           # メイン関数（プロ
         print("RealSense カメラを停止中...")
         pipeline.stop()                         # RealSenseパイプラインを停止する
         print("RealSense カメラが停止しました。")
-
-        save_all_frame_logs()                   # フレームごとのランドマークデータをJSONに保存する
 
         cv2.destroyAllWindows()                 # OpenCVのウィンドウを全て閉じる
         if s:
