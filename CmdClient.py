@@ -71,6 +71,7 @@ def start_pressed():
     vm_command = f"VM;ID:{user_id.get()},Cond:{condition.get()}"              # IDと条件を含むコマンド文字列を生成
     send_command(vm_command)                                                  # コマンドを送信
     send_command("VM;start_log_recording")                                    # VisionManagerにログ記録開始コマンドを送信
+    send_command("SM;AM2_00_ShogoNomura_SoundCloud")
     user_id_menu.config(state=DISABLED)                                        # 入力UIを無効化
     for rb in (condition1_radio, condition2_radio, condition3_radio):          # 条件選択を無効化
         rb.config(state=DISABLED)
