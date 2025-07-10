@@ -5,3 +5,7 @@ VE/
 # Pythonキャッシュなど
 __pycache__/
 *.pyc
+
+# ログファイルを無視
+Log/*
+!Log/.gitkeep
