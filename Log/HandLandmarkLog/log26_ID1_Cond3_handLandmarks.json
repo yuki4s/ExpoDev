@@ -1,0 +1,3357 @@
+{
+  "experiment_info": {
+    "ID": "1",
+    "Cond": "3"
+  },
+  "image_resolution": {
+    "width": 640,
+    "height": 480
+  },
+  "frames": [
+    {
+      "frame_index": 0,
+      "timestamp": "2025-07-11T06:45:24",
+      "hands": [
+        {
+          "hand_id": 0,
+          "handedness": "Right",
+          "hand_confidence": 0.9833056330680847,
+          "min_depth": 235.0,
+          "landmarks": [
+            {
+              "landmark_id": 0,
+              "pixel_x": 583,
+              "pixel_y": 157,
+              "depth": 364.0
+            },
+            {
+              "landmark_id": 1,
+              "pixel_x": 512,
+              "pixel_y": 131,
+              "depth": 391.0
+            },
+            {
+              "landmark_id": 2,
+              "pixel_x": 473,
+              "pixel_y": 80,
+              "depth": 361.0
+            },
+            {
+              "landmark_id": 3,
+              "pixel_x": 449,
+              "pixel_y": 40,
+              "depth": 235.0
+            },
+            {
+              "landmark_id": 4,
+              "pixel_x": 422,
+              "pixel_y": 9,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 5,
+              "pixel_x": 508,
+              "pixel_y": 15,
+              "depth": 356.0
+            },
+            {
+              "landmark_id": 6,
+              "pixel_x": 493,
+              "pixel_y": -34,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 7,
+              "pixel_x": 476,
+              "pixel_y": -67,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 8,
+              "pixel_x": 461,
+              "pixel_y": -91,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 9,
+              "pixel_x": 531,
+              "pixel_y": 9,
+              "depth": 359.0
+            },
+            {
+              "landmark_id": 10,
+              "pixel_x": 517,
+              "pixel_y": -44,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 11,
+              "pixel_x": 497,
+              "pixel_y": -79,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 12,
+              "pixel_x": 482,
+              "pixel_y": -103,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 13,
+              "pixel_x": 553,
+              "pixel_y": 9,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 14,
+              "pixel_x": 544,
+              "pixel_y": -41,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 15,
+              "pixel_x": 529,
+              "pixel_y": -75,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 16,
+              "pixel_x": 518,
+              "pixel_y": -102,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 17,
+              "pixel_x": 576,
+              "pixel_y": 16,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 18,
+              "pixel_x": 572,
+              "pixel_y": -27,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 19,
+              "pixel_x": 560,
+              "pixel_y": -55,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 20,
+              "pixel_x": 549,
+              "pixel_y": -80,
+              "depth": 0.0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "frame_index": 1,
+      "timestamp": "2025-07-11T06:45:24",
+      "hands": [
+        {
+          "hand_id": 0,
+          "handedness": "Right",
+          "hand_confidence": 0.9769112467765808,
+          "min_depth": 234.0,
+          "landmarks": [
+            {
+              "landmark_id": 0,
+              "pixel_x": 572,
+              "pixel_y": 160,
+              "depth": 326.0
+            },
+            {
+              "landmark_id": 1,
+              "pixel_x": 512,
+              "pixel_y": 136,
+              "depth": 393.0
+            },
+            {
+              "landmark_id": 2,
+              "pixel_x": 472,
+              "pixel_y": 79,
+              "depth": 361.0
+            },
+            {
+              "landmark_id": 3,
+              "pixel_x": 448,
+              "pixel_y": 38,
+              "depth": 234.0
+            },
+            {
+              "landmark_id": 4,
+              "pixel_x": 422,
+              "pixel_y": 8,
+              "depth": 248.0
+            },
+            {
+              "landmark_id": 5,
+              "pixel_x": 506,
+              "pixel_y": 13,
+              "depth": 356.0
+            },
+            {
+              "landmark_id": 6,
+              "pixel_x": 493,
+              "pixel_y": -37,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 7,
+              "pixel_x": 477,
+              "pixel_y": -71,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 8,
+              "pixel_x": 464,
+              "pixel_y": -97,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 9,
+              "pixel_x": 529,
+              "pixel_y": 7,
+              "depth": 359.0
+            },
+            {
+              "landmark_id": 10,
+              "pixel_x": 516,
+              "pixel_y": -47,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 11,
+              "pixel_x": 499,
+              "pixel_y": -82,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 12,
+              "pixel_x": 486,
+              "pixel_y": -110,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 13,
+              "pixel_x": 552,
+              "pixel_y": 8,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 14,
+              "pixel_x": 544,
+              "pixel_y": -43,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 15,
+              "pixel_x": 532,
+              "pixel_y": -77,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 16,
+              "pixel_x": 523,
+              "pixel_y": -106,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 17,
+              "pixel_x": 576,
+              "pixel_y": 17,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 18,
+              "pixel_x": 575,
+              "pixel_y": -26,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 19,
+              "pixel_x": 564,
+              "pixel_y": -54,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 20,
+              "pixel_x": 554,
+              "pixel_y": -78,
+              "depth": 0.0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "frame_index": 2,
+      "timestamp": "2025-07-11T06:45:24",
+      "hands": [
+        {
+          "hand_id": 0,
+          "handedness": "Right",
+          "hand_confidence": 0.9788599014282227,
+          "min_depth": 235.0,
+          "landmarks": [
+            {
+              "landmark_id": 0,
+              "pixel_x": 580,
+              "pixel_y": 160,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 1,
+              "pixel_x": 511,
+              "pixel_y": 135,
+              "depth": 394.0
+            },
+            {
+              "landmark_id": 2,
+              "pixel_x": 472,
+              "pixel_y": 82,
+              "depth": 360.0
+            },
+            {
+              "landmark_id": 3,
+              "pixel_x": 448,
+              "pixel_y": 42,
+              "depth": 235.0
+            },
+            {
+              "landmark_id": 4,
+              "pixel_x": 423,
+              "pixel_y": 11,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 5,
+              "pixel_x": 507,
+              "pixel_y": 17,
+              "depth": 357.0
+            },
+            {
+              "landmark_id": 6,
+              "pixel_x": 494,
+              "pixel_y": -32,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 7,
+              "pixel_x": 478,
+              "pixel_y": -64,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 8,
+              "pixel_x": 465,
+              "pixel_y": -88,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 9,
+              "pixel_x": 530,
+              "pixel_y": 10,
+              "depth": 358.0
+            },
+            {
+              "landmark_id": 10,
+              "pixel_x": 518,
+              "pixel_y": -43,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 11,
+              "pixel_x": 500,
+              "pixel_y": -76,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 12,
+              "pixel_x": 486,
+              "pixel_y": -101,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 13,
+              "pixel_x": 553,
+              "pixel_y": 10,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 14,
+              "pixel_x": 545,
+              "pixel_y": -39,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 15,
+              "pixel_x": 532,
+              "pixel_y": -73,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 16,
+              "pixel_x": 522,
+              "pixel_y": -100,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 17,
+              "pixel_x": 577,
+              "pixel_y": 18,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 18,
+              "pixel_x": 575,
+              "pixel_y": -24,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 19,
+              "pixel_x": 565,
+              "pixel_y": -53,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 20,
+              "pixel_x": 556,
+              "pixel_y": -78,
+              "depth": 0.0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "frame_index": 3,
+      "timestamp": "2025-07-11T06:45:24",
+      "hands": [
+        {
+          "hand_id": 0,
+          "handedness": "Right",
+          "hand_confidence": 0.9700620770454407,
+          "min_depth": 234.0,
+          "landmarks": [
+            {
+              "landmark_id": 0,
+              "pixel_x": 570,
+              "pixel_y": 161,
+              "depth": 327.0
+            },
+            {
+              "landmark_id": 1,
+              "pixel_x": 510,
+              "pixel_y": 138,
+              "depth": 397.0
+            },
+            {
+              "landmark_id": 2,
+              "pixel_x": 471,
+              "pixel_y": 81,
+              "depth": 360.0
+            },
+            {
+              "landmark_id": 3,
+              "pixel_x": 448,
+              "pixel_y": 41,
+              "depth": 234.0
+            },
+            {
+              "landmark_id": 4,
+              "pixel_x": 422,
+              "pixel_y": 10,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 5,
+              "pixel_x": 505,
+              "pixel_y": 15,
+              "depth": 357.0
+            },
+            {
+              "landmark_id": 6,
+              "pixel_x": 494,
+              "pixel_y": -35,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 7,
+              "pixel_x": 479,
+              "pixel_y": -69,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 8,
+              "pixel_x": 466,
+              "pixel_y": -95,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 9,
+              "pixel_x": 527,
+              "pixel_y": 8,
+              "depth": 359.0
+            },
+            {
+              "landmark_id": 10,
+              "pixel_x": 516,
+              "pixel_y": -46,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 11,
+              "pixel_x": 500,
+              "pixel_y": -81,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 12,
+              "pixel_x": 486,
+              "pixel_y": -109,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 13,
+              "pixel_x": 550,
+              "pixel_y": 8,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 14,
+              "pixel_x": 542,
+              "pixel_y": -42,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 15,
+              "pixel_x": 531,
+              "pixel_y": -76,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 16,
+              "pixel_x": 522,
+              "pixel_y": -105,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 17,
+              "pixel_x": 575,
+              "pixel_y": 16,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 18,
+              "pixel_x": 573,
+              "pixel_y": -27,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 19,
+              "pixel_x": 562,
+              "pixel_y": -56,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 20,
+              "pixel_x": 552,
+              "pixel_y": -81,
+              "depth": 0.0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "frame_index": 4,
+      "timestamp": "2025-07-11T06:45:24",
+      "hands": [
+        {
+          "hand_id": 0,
+          "handedness": "Right",
+          "hand_confidence": 0.9837818741798401,
+          "min_depth": 226.0,
+          "landmarks": [
+            {
+              "landmark_id": 0,
+              "pixel_x": 573,
+              "pixel_y": 162,
+              "depth": 326.0
+            },
+            {
+              "landmark_id": 1,
+              "pixel_x": 509,
+              "pixel_y": 138,
+              "depth": 395.0
+            },
+            {
+              "landmark_id": 2,
+              "pixel_x": 471,
+              "pixel_y": 81,
+              "depth": 360.0
+            },
+            {
+              "landmark_id": 3,
+              "pixel_x": 447,
+              "pixel_y": 41,
+              "depth": 234.0
+            },
+            {
+              "landmark_id": 4,
+              "pixel_x": 421,
+              "pixel_y": 12,
+              "depth": 226.0
+            },
+            {
+              "landmark_id": 5,
+              "pixel_x": 505,
+              "pixel_y": 15,
+              "depth": 357.0
+            },
+            {
+              "landmark_id": 6,
+              "pixel_x": 496,
+              "pixel_y": -36,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 7,
+              "pixel_x": 484,
+              "pixel_y": -70,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 8,
+              "pixel_x": 473,
+              "pixel_y": -97,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 9,
+              "pixel_x": 528,
+              "pixel_y": 10,
+              "depth": 358.0
+            },
+            {
+              "landmark_id": 10,
+              "pixel_x": 521,
+              "pixel_y": -44,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 11,
+              "pixel_x": 507,
+              "pixel_y": -80,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 12,
+              "pixel_x": 497,
+              "pixel_y": -107,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 13,
+              "pixel_x": 551,
+              "pixel_y": 12,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 14,
+              "pixel_x": 547,
+              "pixel_y": -38,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 15,
+              "pixel_x": 538,
+              "pixel_y": -72,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 16,
+              "pixel_x": 531,
+              "pixel_y": -101,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 17,
+              "pixel_x": 575,
+              "pixel_y": 23,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 18,
+              "pixel_x": 576,
+              "pixel_y": -17,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 19,
+              "pixel_x": 568,
+              "pixel_y": -45,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 20,
+              "pixel_x": 560,
+              "pixel_y": -69,
+              "depth": 0.0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "frame_index": 5,
+      "timestamp": "2025-07-11T06:45:24",
+      "hands": [
+        {
+          "hand_id": 0,
+          "handedness": "Right",
+          "hand_confidence": 0.97420734167099,
+          "min_depth": 234.0,
+          "landmarks": [
+            {
+              "landmark_id": 0,
+              "pixel_x": 568,
+              "pixel_y": 161,
+              "depth": 324.0
+            },
+            {
+              "landmark_id": 1,
+              "pixel_x": 508,
+              "pixel_y": 137,
+              "depth": 394.0
+            },
+            {
+              "landmark_id": 2,
+              "pixel_x": 469,
+              "pixel_y": 81,
+              "depth": 359.0
+            },
+            {
+              "landmark_id": 3,
+              "pixel_x": 446,
+              "pixel_y": 41,
+              "depth": 234.0
+            },
+            {
+              "landmark_id": 4,
+              "pixel_x": 420,
+              "pixel_y": 11,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 5,
+              "pixel_x": 504,
+              "pixel_y": 14,
+              "depth": 356.0
+            },
+            {
+              "landmark_id": 6,
+              "pixel_x": 497,
+              "pixel_y": -38,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 7,
+              "pixel_x": 484,
+              "pixel_y": -73,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 8,
+              "pixel_x": 474,
+              "pixel_y": -101,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 9,
+              "pixel_x": 526,
+              "pixel_y": 9,
+              "depth": 357.0
+            },
+            {
+              "landmark_id": 10,
+              "pixel_x": 520,
+              "pixel_y": -46,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 11,
+              "pixel_x": 505,
+              "pixel_y": -82,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 12,
+              "pixel_x": 495,
+              "pixel_y": -111,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 13,
+              "pixel_x": 548,
+              "pixel_y": 10,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 14,
+              "pixel_x": 544,
+              "pixel_y": -40,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 15,
+              "pixel_x": 535,
+              "pixel_y": -74,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 16,
+              "pixel_x": 528,
+              "pixel_y": -103,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 17,
+              "pixel_x": 572,
+              "pixel_y": 20,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 18,
+              "pixel_x": 572,
+              "pixel_y": -21,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 19,
+              "pixel_x": 563,
+              "pixel_y": -50,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 20,
+              "pixel_x": 554,
+              "pixel_y": -74,
+              "depth": 0.0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "frame_index": 6,
+      "timestamp": "2025-07-11T06:45:24",
+      "hands": [
+        {
+          "hand_id": 0,
+          "handedness": "Right",
+          "hand_confidence": 0.9713350534439087,
+          "min_depth": 235.0,
+          "landmarks": [
+            {
+              "landmark_id": 0,
+              "pixel_x": 570,
+              "pixel_y": 160,
+              "depth": 323.0
+            },
+            {
+              "landmark_id": 1,
+              "pixel_x": 507,
+              "pixel_y": 137,
+              "depth": 389.0
+            },
+            {
+              "landmark_id": 2,
+              "pixel_x": 468,
+              "pixel_y": 81,
+              "depth": 358.0
+            },
+            {
+              "landmark_id": 3,
+              "pixel_x": 444,
+              "pixel_y": 41,
+              "depth": 235.0
+            },
+            {
+              "landmark_id": 4,
+              "pixel_x": 418,
+              "pixel_y": 11,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 5,
+              "pixel_x": 502,
+              "pixel_y": 14,
+              "depth": 357.0
+            },
+            {
+              "landmark_id": 6,
+              "pixel_x": 491,
+              "pixel_y": -36,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 7,
+              "pixel_x": 477,
+              "pixel_y": -69,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 8,
+              "pixel_x": 465,
+              "pixel_y": -94,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 9,
+              "pixel_x": 524,
+              "pixel_y": 8,
+              "depth": 357.0
+            },
+            {
+              "landmark_id": 10,
+              "pixel_x": 514,
+              "pixel_y": -45,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 11,
+              "pixel_x": 497,
+              "pixel_y": -79,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 12,
+              "pixel_x": 485,
+              "pixel_y": -104,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 13,
+              "pixel_x": 547,
+              "pixel_y": 8,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 14,
+              "pixel_x": 539,
+              "pixel_y": -41,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 15,
+              "pixel_x": 527,
+              "pixel_y": -74,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 16,
+              "pixel_x": 518,
+              "pixel_y": -100,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 17,
+              "pixel_x": 571,
+              "pixel_y": 16,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 18,
+              "pixel_x": 569,
+              "pixel_y": -24,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 19,
+              "pixel_x": 559,
+              "pixel_y": -51,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 20,
+              "pixel_x": 549,
+              "pixel_y": -75,
+              "depth": 0.0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "frame_index": 7,
+      "timestamp": "2025-07-11T06:45:24",
+      "hands": [
+        {
+          "hand_id": 0,
+          "handedness": "Right",
+          "hand_confidence": 0.9774768352508545,
+          "min_depth": 228.0,
+          "landmarks": [
+            {
+              "landmark_id": 0,
+              "pixel_x": 572,
+              "pixel_y": 160,
+              "depth": 321.0
+            },
+            {
+              "landmark_id": 1,
+              "pixel_x": 506,
+              "pixel_y": 136,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 2,
+              "pixel_x": 467,
+              "pixel_y": 81,
+              "depth": 358.0
+            },
+            {
+              "landmark_id": 3,
+              "pixel_x": 443,
+              "pixel_y": 41,
+              "depth": 236.0
+            },
+            {
+              "landmark_id": 4,
+              "pixel_x": 417,
+              "pixel_y": 11,
+              "depth": 228.0
+            },
+            {
+              "landmark_id": 5,
+              "pixel_x": 503,
+              "pixel_y": 15,
+              "depth": 356.0
+            },
+            {
+              "landmark_id": 6,
+              "pixel_x": 494,
+              "pixel_y": -36,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 7,
+              "pixel_x": 482,
+              "pixel_y": -70,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 8,
+              "pixel_x": 471,
+              "pixel_y": -97,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 9,
+              "pixel_x": 526,
+              "pixel_y": 8,
+              "depth": 358.0
+            },
+            {
+              "landmark_id": 10,
+              "pixel_x": 518,
+              "pixel_y": -46,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 11,
+              "pixel_x": 504,
+              "pixel_y": -82,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 12,
+              "pixel_x": 494,
+              "pixel_y": -110,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 13,
+              "pixel_x": 547,
+              "pixel_y": 9,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 14,
+              "pixel_x": 544,
+              "pixel_y": -41,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 15,
+              "pixel_x": 534,
+              "pixel_y": -76,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 16,
+              "pixel_x": 528,
+              "pixel_y": -104,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 17,
+              "pixel_x": 570,
+              "pixel_y": 17,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 18,
+              "pixel_x": 570,
+              "pixel_y": -25,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 19,
+              "pixel_x": 560,
+              "pixel_y": -53,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 20,
+              "pixel_x": 552,
+              "pixel_y": -78,
+              "depth": 0.0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "frame_index": 8,
+      "timestamp": "2025-07-11T06:45:24",
+      "hands": [
+        {
+          "hand_id": 0,
+          "handedness": "Right",
+          "hand_confidence": 0.9927817583084106,
+          "min_depth": 240.0,
+          "landmarks": [
+            {
+              "landmark_id": 0,
+              "pixel_x": 582,
+              "pixel_y": 147,
+              "depth": 362.0
+            },
+            {
+              "landmark_id": 1,
+              "pixel_x": 508,
+              "pixel_y": 122,
+              "depth": 381.0
+            },
+            {
+              "landmark_id": 2,
+              "pixel_x": 464,
+              "pixel_y": 74,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 3,
+              "pixel_x": 439,
+              "pixel_y": 35,
+              "depth": 240.0
+            },
+            {
+              "landmark_id": 4,
+              "pixel_x": 413,
+              "pixel_y": 2,
+              "depth": 252.0
+            },
+            {
+              "landmark_id": 5,
+              "pixel_x": 501,
+              "pixel_y": 6,
+              "depth": 357.0
+            },
+            {
+              "landmark_id": 6,
+              "pixel_x": 486,
+              "pixel_y": -45,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 7,
+              "pixel_x": 470,
+              "pixel_y": -77,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 8,
+              "pixel_x": 457,
+              "pixel_y": -100,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 9,
+              "pixel_x": 524,
+              "pixel_y": 0,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 10,
+              "pixel_x": 511,
+              "pixel_y": -54,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 11,
+              "pixel_x": 493,
+              "pixel_y": -89,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 12,
+              "pixel_x": 480,
+              "pixel_y": -111,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 13,
+              "pixel_x": 546,
+              "pixel_y": -1,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 14,
+              "pixel_x": 537,
+              "pixel_y": -52,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 15,
+              "pixel_x": 521,
+              "pixel_y": -86,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 16,
+              "pixel_x": 511,
+              "pixel_y": -110,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 17,
+              "pixel_x": 568,
+              "pixel_y": 2,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 18,
+              "pixel_x": 562,
+              "pixel_y": -42,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 19,
+              "pixel_x": 548,
+              "pixel_y": -69,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 20,
+              "pixel_x": 537,
+              "pixel_y": -89,
+              "depth": 0.0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "frame_index": 9,
+      "timestamp": "2025-07-11T06:45:24",
+      "hands": [
+        {
+          "hand_id": 0,
+          "handedness": "Right",
+          "hand_confidence": 0.9719172120094299,
+          "min_depth": 241.0,
+          "landmarks": [
+            {
+              "landmark_id": 0,
+              "pixel_x": 580,
+              "pixel_y": 131,
+              "depth": 358.0
+            },
+            {
+              "landmark_id": 1,
+              "pixel_x": 515,
+              "pixel_y": 114,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 2,
+              "pixel_x": 462,
+              "pixel_y": 66,
+              "depth": 249.0
+            },
+            {
+              "landmark_id": 3,
+              "pixel_x": 431,
+              "pixel_y": 23,
+              "depth": 241.0
+            },
+            {
+              "landmark_id": 4,
+              "pixel_x": 407,
+              "pixel_y": -14,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 5,
+              "pixel_x": 487,
+              "pixel_y": 1,
+              "depth": 357.0
+            },
+            {
+              "landmark_id": 6,
+              "pixel_x": 463,
+              "pixel_y": -48,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 7,
+              "pixel_x": 440,
+              "pixel_y": -77,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 8,
+              "pixel_x": 423,
+              "pixel_y": -96,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 9,
+              "pixel_x": 510,
+              "pixel_y": -9,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 10,
+              "pixel_x": 484,
+              "pixel_y": -58,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 11,
+              "pixel_x": 458,
+              "pixel_y": -88,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 12,
+              "pixel_x": 438,
+              "pixel_y": -104,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 13,
+              "pixel_x": 535,
+              "pixel_y": -13,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 14,
+              "pixel_x": 509,
+              "pixel_y": -60,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 15,
+              "pixel_x": 481,
+              "pixel_y": -84,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 16,
+              "pixel_x": 459,
+              "pixel_y": -97,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 17,
+              "pixel_x": 562,
+              "pixel_y": -12,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 18,
+              "pixel_x": 538,
+              "pixel_y": -48,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 19,
+              "pixel_x": 512,
+              "pixel_y": -66,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 20,
+              "pixel_x": 491,
+              "pixel_y": -77,
+              "depth": 0.0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "frame_index": 10,
+      "timestamp": "2025-07-11T06:45:24",
+      "hands": []
+    },
+    {
+      "frame_index": 11,
+      "timestamp": "2025-07-11T06:45:24",
+      "hands": []
+    },
+    {
+      "frame_index": 12,
+      "timestamp": "2025-07-11T06:45:24",
+      "hands": []
+    },
+    {
+      "frame_index": 13,
+      "timestamp": "2025-07-11T06:45:24",
+      "hands": []
+    },
+    {
+      "frame_index": 14,
+      "timestamp": "2025-07-11T06:45:24",
+      "hands": []
+    },
+    {
+      "frame_index": 15,
+      "timestamp": "2025-07-11T06:45:24",
+      "hands": []
+    },
+    {
+      "frame_index": 16,
+      "timestamp": "2025-07-11T06:45:25",
+      "hands": []
+    },
+    {
+      "frame_index": 17,
+      "timestamp": "2025-07-11T06:45:25",
+      "hands": []
+    },
+    {
+      "frame_index": 18,
+      "timestamp": "2025-07-11T06:45:25",
+      "hands": []
+    },
+    {
+      "frame_index": 19,
+      "timestamp": "2025-07-11T06:45:25",
+      "hands": []
+    },
+    {
+      "frame_index": 20,
+      "timestamp": "2025-07-11T06:45:25",
+      "hands": []
+    },
+    {
+      "frame_index": 21,
+      "timestamp": "2025-07-11T06:45:25",
+      "hands": []
+    },
+    {
+      "frame_index": 22,
+      "timestamp": "2025-07-11T06:45:25",
+      "hands": []
+    },
+    {
+      "frame_index": 23,
+      "timestamp": "2025-07-11T06:45:25",
+      "hands": []
+    },
+    {
+      "frame_index": 24,
+      "timestamp": "2025-07-11T06:45:25",
+      "hands": []
+    },
+    {
+      "frame_index": 25,
+      "timestamp": "2025-07-11T06:45:25",
+      "hands": []
+    },
+    {
+      "frame_index": 26,
+      "timestamp": "2025-07-11T06:45:25",
+      "hands": []
+    },
+    {
+      "frame_index": 27,
+      "timestamp": "2025-07-11T06:45:25",
+      "hands": []
+    },
+    {
+      "frame_index": 28,
+      "timestamp": "2025-07-11T06:45:25",
+      "hands": []
+    },
+    {
+      "frame_index": 29,
+      "timestamp": "2025-07-11T06:45:25",
+      "hands": []
+    },
+    {
+      "frame_index": 30,
+      "timestamp": "2025-07-11T06:45:25",
+      "hands": []
+    },
+    {
+      "frame_index": 31,
+      "timestamp": "2025-07-11T06:45:25",
+      "hands": []
+    },
+    {
+      "frame_index": 32,
+      "timestamp": "2025-07-11T06:45:25",
+      "hands": []
+    },
+    {
+      "frame_index": 33,
+      "timestamp": "2025-07-11T06:45:25",
+      "hands": []
+    },
+    {
+      "frame_index": 34,
+      "timestamp": "2025-07-11T06:45:25",
+      "hands": []
+    },
+    {
+      "frame_index": 35,
+      "timestamp": "2025-07-11T06:45:25",
+      "hands": []
+    },
+    {
+      "frame_index": 0,
+      "timestamp": "2025-07-11T06:45:32",
+      "hands": [
+        {
+          "hand_id": 0,
+          "handedness": "Right",
+          "hand_confidence": 0.9651835560798645,
+          "min_depth": 206.0,
+          "landmarks": [
+            {
+              "landmark_id": 0,
+              "pixel_x": 573,
+              "pixel_y": 121,
+              "depth": 345.0
+            },
+            {
+              "landmark_id": 1,
+              "pixel_x": 507,
+              "pixel_y": 98,
+              "depth": 356.0
+            },
+            {
+              "landmark_id": 2,
+              "pixel_x": 450,
+              "pixel_y": 43,
+              "depth": 218.0
+            },
+            {
+              "landmark_id": 3,
+              "pixel_x": 413,
+              "pixel_y": 4,
+              "depth": 206.0
+            },
+            {
+              "landmark_id": 4,
+              "pixel_x": 385,
+              "pixel_y": -24,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 5,
+              "pixel_x": 465,
+              "pixel_y": -22,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 6,
+              "pixel_x": 434,
+              "pixel_y": -67,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 7,
+              "pixel_x": 408,
+              "pixel_y": -95,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 8,
+              "pixel_x": 392,
+              "pixel_y": -117,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 9,
+              "pixel_x": 495,
+              "pixel_y": -38,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 10,
+              "pixel_x": 466,
+              "pixel_y": -88,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 11,
+              "pixel_x": 440,
+              "pixel_y": -115,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 12,
+              "pixel_x": 422,
+              "pixel_y": -136,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 13,
+              "pixel_x": 530,
+              "pixel_y": -46,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 14,
+              "pixel_x": 509,
+              "pixel_y": -96,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 15,
+              "pixel_x": 486,
+              "pixel_y": -124,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 16,
+              "pixel_x": 469,
+              "pixel_y": -149,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 17,
+              "pixel_x": 570,
+              "pixel_y": -45,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 18,
+              "pixel_x": 557,
+              "pixel_y": -93,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 19,
+              "pixel_x": 538,
+              "pixel_y": -119,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 20,
+              "pixel_x": 521,
+              "pixel_y": -139,
+              "depth": 0.0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "frame_index": 1,
+      "timestamp": "2025-07-11T06:45:32",
+      "hands": [
+        {
+          "hand_id": 0,
+          "handedness": "Right",
+          "hand_confidence": 0.9652150273323059,
+          "min_depth": 225.0,
+          "landmarks": [
+            {
+              "landmark_id": 0,
+              "pixel_x": 574,
+              "pixel_y": 139,
+              "depth": 348.0
+            },
+            {
+              "landmark_id": 1,
+              "pixel_x": 506,
+              "pixel_y": 116,
+              "depth": 366.0
+            },
+            {
+              "landmark_id": 2,
+              "pixel_x": 447,
+              "pixel_y": 59,
+              "depth": 354.0
+            },
+            {
+              "landmark_id": 3,
+              "pixel_x": 406,
+              "pixel_y": 16,
+              "depth": 225.0
+            },
+            {
+              "landmark_id": 4,
+              "pixel_x": 367,
+              "pixel_y": -15,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 5,
+              "pixel_x": 474,
+              "pixel_y": -8,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 6,
+              "pixel_x": 450,
+              "pixel_y": -58,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 7,
+              "pixel_x": 426,
+              "pixel_y": -87,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 8,
+              "pixel_x": 407,
+              "pixel_y": -109,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 9,
+              "pixel_x": 502,
+              "pixel_y": -19,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 10,
+              "pixel_x": 477,
+              "pixel_y": -74,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 11,
+              "pixel_x": 449,
+              "pixel_y": -103,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 12,
+              "pixel_x": 428,
+              "pixel_y": -123,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 13,
+              "pixel_x": 533,
+              "pixel_y": -24,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 14,
+              "pixel_x": 512,
+              "pixel_y": -78,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 15,
+              "pixel_x": 485,
+              "pixel_y": -107,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 16,
+              "pixel_x": 466,
+              "pixel_y": -126,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 17,
+              "pixel_x": 567,
+              "pixel_y": -22,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 18,
+              "pixel_x": 554,
+              "pixel_y": -70,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 19,
+              "pixel_x": 533,
+              "pixel_y": -97,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 20,
+              "pixel_x": 512,
+              "pixel_y": -116,
+              "depth": 0.0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "frame_index": 2,
+      "timestamp": "2025-07-11T06:45:32",
+      "hands": [
+        {
+          "hand_id": 0,
+          "handedness": "Right",
+          "hand_confidence": 0.9609594941139221,
+          "min_depth": 234.0,
+          "landmarks": [
+            {
+              "landmark_id": 0,
+              "pixel_x": 562,
+              "pixel_y": 165,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 1,
+              "pixel_x": 493,
+              "pixel_y": 148,
+              "depth": 379.0
+            },
+            {
+              "landmark_id": 2,
+              "pixel_x": 435,
+              "pixel_y": 95,
+              "depth": 350.0
+            },
+            {
+              "landmark_id": 3,
+              "pixel_x": 395,
+              "pixel_y": 57,
+              "depth": 235.0
+            },
+            {
+              "landmark_id": 4,
+              "pixel_x": 357,
+              "pixel_y": 28,
+              "depth": 234.0
+            },
+            {
+              "landmark_id": 5,
+              "pixel_x": 461,
+              "pixel_y": 23,
+              "depth": 351.0
+            },
+            {
+              "landmark_id": 6,
+              "pixel_x": 435,
+              "pixel_y": -22,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 7,
+              "pixel_x": 408,
+              "pixel_y": -41,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 8,
+              "pixel_x": 386,
+              "pixel_y": -50,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 9,
+              "pixel_x": 484,
+              "pixel_y": 9,
+              "depth": 352.0
+            },
+            {
+              "landmark_id": 10,
+              "pixel_x": 458,
+              "pixel_y": -39,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 11,
+              "pixel_x": 430,
+              "pixel_y": -58,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 12,
+              "pixel_x": 407,
+              "pixel_y": -69,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 13,
+              "pixel_x": 511,
+              "pixel_y": 2,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 14,
+              "pixel_x": 491,
+              "pixel_y": -45,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 15,
+              "pixel_x": 466,
+              "pixel_y": -68,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 16,
+              "pixel_x": 445,
+              "pixel_y": -84,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 17,
+              "pixel_x": 542,
+              "pixel_y": 3,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 18,
+              "pixel_x": 530,
+              "pixel_y": -40,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 19,
+              "pixel_x": 510,
+              "pixel_y": -65,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 20,
+              "pixel_x": 492,
+              "pixel_y": -84,
+              "depth": 0.0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "frame_index": 3,
+      "timestamp": "2025-07-11T06:45:32",
+      "hands": [
+        {
+          "hand_id": 0,
+          "handedness": "Right",
+          "hand_confidence": 0.9967365264892578,
+          "min_depth": 230.0,
+          "landmarks": [
+            {
+              "landmark_id": 0,
+              "pixel_x": 558,
+              "pixel_y": 182,
+              "depth": 294.0
+            },
+            {
+              "landmark_id": 1,
+              "pixel_x": 483,
+              "pixel_y": 157,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 2,
+              "pixel_x": 428,
+              "pixel_y": 109,
+              "depth": 352.0
+            },
+            {
+              "landmark_id": 3,
+              "pixel_x": 384,
+              "pixel_y": 83,
+              "depth": 240.0
+            },
+            {
+              "landmark_id": 4,
+              "pixel_x": 344,
+              "pixel_y": 57,
+              "depth": 230.0
+            },
+            {
+              "landmark_id": 5,
+              "pixel_x": 476,
+              "pixel_y": 27,
+              "depth": 351.0
+            },
+            {
+              "landmark_id": 6,
+              "pixel_x": 444,
+              "pixel_y": -14,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 7,
+              "pixel_x": 405,
+              "pixel_y": -4,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 8,
+              "pixel_x": 382,
+              "pixel_y": 19,
+              "depth": 397.0
+            },
+            {
+              "landmark_id": 9,
+              "pixel_x": 493,
+              "pixel_y": 22,
+              "depth": 350.0
+            },
+            {
+              "landmark_id": 10,
+              "pixel_x": 448,
+              "pixel_y": -22,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 11,
+              "pixel_x": 404,
+              "pixel_y": 0,
+              "depth": 387.0
+            },
+            {
+              "landmark_id": 12,
+              "pixel_x": 381,
+              "pixel_y": 34,
+              "depth": 389.0
+            },
+            {
+              "landmark_id": 13,
+              "pixel_x": 508,
+              "pixel_y": 24,
+              "depth": 349.0
+            },
+            {
+              "landmark_id": 14,
+              "pixel_x": 454,
+              "pixel_y": -14,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 15,
+              "pixel_x": 405,
+              "pixel_y": 10,
+              "depth": 384.0
+            },
+            {
+              "landmark_id": 16,
+              "pixel_x": 377,
+              "pixel_y": 44,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 17,
+              "pixel_x": 517,
+              "pixel_y": 37,
+              "depth": 349.0
+            },
+            {
+              "landmark_id": 18,
+              "pixel_x": 463,
+              "pixel_y": 8,
+              "depth": 353.0
+            },
+            {
+              "landmark_id": 19,
+              "pixel_x": 420,
+              "pixel_y": 18,
+              "depth": 372.0
+            },
+            {
+              "landmark_id": 20,
+              "pixel_x": 390,
+              "pixel_y": 39,
+              "depth": 383.0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "frame_index": 4,
+      "timestamp": "2025-07-11T06:45:32",
+      "hands": [
+        {
+          "hand_id": 0,
+          "handedness": "Right",
+          "hand_confidence": 0.999372661113739,
+          "min_depth": 234.0,
+          "landmarks": [
+            {
+              "landmark_id": 0,
+              "pixel_x": 551,
+              "pixel_y": 189,
+              "depth": 295.0
+            },
+            {
+              "landmark_id": 1,
+              "pixel_x": 474,
+              "pixel_y": 167,
+              "depth": 277.0
+            },
+            {
+              "landmark_id": 2,
+              "pixel_x": 417,
+              "pixel_y": 124,
+              "depth": 245.0
+            },
+            {
+              "landmark_id": 3,
+              "pixel_x": 373,
+              "pixel_y": 101,
+              "depth": 243.0
+            },
+            {
+              "landmark_id": 4,
+              "pixel_x": 335,
+              "pixel_y": 79,
+              "depth": 234.0
+            },
+            {
+              "landmark_id": 5,
+              "pixel_x": 470,
+              "pixel_y": 19,
+              "depth": 352.0
+            },
+            {
+              "landmark_id": 6,
+              "pixel_x": 428,
+              "pixel_y": -19,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 7,
+              "pixel_x": 385,
+              "pixel_y": -29,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 8,
+              "pixel_x": 359,
+              "pixel_y": -26,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 9,
+              "pixel_x": 488,
+              "pixel_y": 17,
+              "depth": 351.0
+            },
+            {
+              "landmark_id": 10,
+              "pixel_x": 421,
+              "pixel_y": -17,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 11,
+              "pixel_x": 370,
+              "pixel_y": 0,
+              "depth": 409.0
+            },
+            {
+              "landmark_id": 12,
+              "pixel_x": 346,
+              "pixel_y": 23,
+              "depth": 408.0
+            },
+            {
+              "landmark_id": 13,
+              "pixel_x": 501,
+              "pixel_y": 27,
+              "depth": 350.0
+            },
+            {
+              "landmark_id": 14,
+              "pixel_x": 426,
+              "pixel_y": 3,
+              "depth": 371.0
+            },
+            {
+              "landmark_id": 15,
+              "pixel_x": 380,
+              "pixel_y": 39,
+              "depth": 389.0
+            },
+            {
+              "landmark_id": 16,
+              "pixel_x": 363,
+              "pixel_y": 74,
+              "depth": 235.0
+            },
+            {
+              "landmark_id": 17,
+              "pixel_x": 504,
+              "pixel_y": 51,
+              "depth": 350.0
+            },
+            {
+              "landmark_id": 18,
+              "pixel_x": 439,
+              "pixel_y": 29,
+              "depth": 361.0
+            },
+            {
+              "landmark_id": 19,
+              "pixel_x": 398,
+              "pixel_y": 50,
+              "depth": 375.0
+            },
+            {
+              "landmark_id": 20,
+              "pixel_x": 377,
+              "pixel_y": 78,
+              "depth": 241.0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "frame_index": 5,
+      "timestamp": "2025-07-11T06:45:32",
+      "hands": [
+        {
+          "hand_id": 0,
+          "handedness": "Right",
+          "hand_confidence": 0.9989796280860901,
+          "min_depth": 240.0,
+          "landmarks": [
+            {
+              "landmark_id": 0,
+              "pixel_x": 554,
+              "pixel_y": 202,
+              "depth": 298.0
+            },
+            {
+              "landmark_id": 1,
+              "pixel_x": 466,
+              "pixel_y": 190,
+              "depth": 278.0
+            },
+            {
+              "landmark_id": 2,
+              "pixel_x": 408,
+              "pixel_y": 150,
+              "depth": 247.0
+            },
+            {
+              "landmark_id": 3,
+              "pixel_x": 365,
+              "pixel_y": 131,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 4,
+              "pixel_x": 325,
+              "pixel_y": 116,
+              "depth": 240.0
+            },
+            {
+              "landmark_id": 5,
+              "pixel_x": 443,
+              "pixel_y": 50,
+              "depth": 356.0
+            },
+            {
+              "landmark_id": 6,
+              "pixel_x": 384,
+              "pixel_y": 14,
+              "depth": 398.0
+            },
+            {
+              "landmark_id": 7,
+              "pixel_x": 334,
+              "pixel_y": 9,
+              "depth": 402.0
+            },
+            {
+              "landmark_id": 8,
+              "pixel_x": 297,
+              "pixel_y": 16,
+              "depth": 401.0
+            },
+            {
+              "landmark_id": 9,
+              "pixel_x": 466,
+              "pixel_y": 46,
+              "depth": 350.0
+            },
+            {
+              "landmark_id": 10,
+              "pixel_x": 397,
+              "pixel_y": 2,
+              "depth": 393.0
+            },
+            {
+              "landmark_id": 11,
+              "pixel_x": 337,
+              "pixel_y": 6,
+              "depth": 402.0
+            },
+            {
+              "landmark_id": 12,
+              "pixel_x": 296,
+              "pixel_y": 21,
+              "depth": 403.0
+            },
+            {
+              "landmark_id": 13,
+              "pixel_x": 485,
+              "pixel_y": 62,
+              "depth": 352.0
+            },
+            {
+              "landmark_id": 14,
+              "pixel_x": 415,
+              "pixel_y": 10,
+              "depth": 377.0
+            },
+            {
+              "landmark_id": 15,
+              "pixel_x": 353,
+              "pixel_y": 21,
+              "depth": 407.0
+            },
+            {
+              "landmark_id": 16,
+              "pixel_x": 313,
+              "pixel_y": 40,
+              "depth": 416.0
+            },
+            {
+              "landmark_id": 17,
+              "pixel_x": 494,
+              "pixel_y": 95,
+              "depth": 361.0
+            },
+            {
+              "landmark_id": 18,
+              "pixel_x": 426,
+              "pixel_y": 73,
+              "depth": 357.0
+            },
+            {
+              "landmark_id": 19,
+              "pixel_x": 386,
+              "pixel_y": 94,
+              "depth": 372.0
+            },
+            {
+              "landmark_id": 20,
+              "pixel_x": 362,
+              "pixel_y": 123,
+              "depth": 249.0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "frame_index": 6,
+      "timestamp": "2025-07-11T06:45:32",
+      "hands": [
+        {
+          "hand_id": 0,
+          "handedness": "Right",
+          "hand_confidence": 0.9974397420883179,
+          "min_depth": 233.0,
+          "landmarks": [
+            {
+              "landmark_id": 0,
+              "pixel_x": 554,
+              "pixel_y": 209,
+              "depth": 301.0
+            },
+            {
+              "landmark_id": 1,
+              "pixel_x": 461,
+              "pixel_y": 201,
+              "depth": 279.0
+            },
+            {
+              "landmark_id": 2,
+              "pixel_x": 403,
+              "pixel_y": 168,
+              "depth": 249.0
+            },
+            {
+              "landmark_id": 3,
+              "pixel_x": 360,
+              "pixel_y": 154,
+              "depth": 236.0
+            },
+            {
+              "landmark_id": 4,
+              "pixel_x": 318,
+              "pixel_y": 145,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 5,
+              "pixel_x": 435,
+              "pixel_y": 65,
+              "depth": 355.0
+            },
+            {
+              "landmark_id": 6,
+              "pixel_x": 373,
+              "pixel_y": 28,
+              "depth": 397.0
+            },
+            {
+              "landmark_id": 7,
+              "pixel_x": 325,
+              "pixel_y": 25,
+              "depth": 407.0
+            },
+            {
+              "landmark_id": 8,
+              "pixel_x": 288,
+              "pixel_y": 34,
+              "depth": 413.0
+            },
+            {
+              "landmark_id": 9,
+              "pixel_x": 458,
+              "pixel_y": 63,
+              "depth": 353.0
+            },
+            {
+              "landmark_id": 10,
+              "pixel_x": 389,
+              "pixel_y": 15,
+              "depth": 392.0
+            },
+            {
+              "landmark_id": 11,
+              "pixel_x": 329,
+              "pixel_y": 22,
+              "depth": 407.0
+            },
+            {
+              "landmark_id": 12,
+              "pixel_x": 285,
+              "pixel_y": 35,
+              "depth": 414.0
+            },
+            {
+              "landmark_id": 13,
+              "pixel_x": 477,
+              "pixel_y": 80,
+              "depth": 356.0
+            },
+            {
+              "landmark_id": 14,
+              "pixel_x": 401,
+              "pixel_y": 27,
+              "depth": 380.0
+            },
+            {
+              "landmark_id": 15,
+              "pixel_x": 338,
+              "pixel_y": 43,
+              "depth": 412.0
+            },
+            {
+              "landmark_id": 16,
+              "pixel_x": 293,
+              "pixel_y": 65,
+              "depth": 438.0
+            },
+            {
+              "landmark_id": 17,
+              "pixel_x": 483,
+              "pixel_y": 116,
+              "depth": 362.0
+            },
+            {
+              "landmark_id": 18,
+              "pixel_x": 408,
+              "pixel_y": 98,
+              "depth": 361.0
+            },
+            {
+              "landmark_id": 19,
+              "pixel_x": 368,
+              "pixel_y": 122,
+              "depth": 249.0
+            },
+            {
+              "landmark_id": 20,
+              "pixel_x": 344,
+              "pixel_y": 151,
+              "depth": 233.0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "frame_index": 7,
+      "timestamp": "2025-07-11T06:45:32",
+      "hands": [
+        {
+          "hand_id": 0,
+          "handedness": "Right",
+          "hand_confidence": 0.9973540306091309,
+          "min_depth": 234.0,
+          "landmarks": [
+            {
+              "landmark_id": 0,
+              "pixel_x": 552,
+              "pixel_y": 215,
+              "depth": 302.0
+            },
+            {
+              "landmark_id": 1,
+              "pixel_x": 461,
+              "pixel_y": 206,
+              "depth": 278.0
+            },
+            {
+              "landmark_id": 2,
+              "pixel_x": 401,
+              "pixel_y": 174,
+              "depth": 249.0
+            },
+            {
+              "landmark_id": 3,
+              "pixel_x": 359,
+              "pixel_y": 160,
+              "depth": 238.0
+            },
+            {
+              "landmark_id": 4,
+              "pixel_x": 320,
+              "pixel_y": 152,
+              "depth": 238.0
+            },
+            {
+              "landmark_id": 5,
+              "pixel_x": 432,
+              "pixel_y": 71,
+              "depth": 355.0
+            },
+            {
+              "landmark_id": 6,
+              "pixel_x": 372,
+              "pixel_y": 29,
+              "depth": 398.0
+            },
+            {
+              "landmark_id": 7,
+              "pixel_x": 324,
+              "pixel_y": 20,
+              "depth": 406.0
+            },
+            {
+              "landmark_id": 8,
+              "pixel_x": 286,
+              "pixel_y": 22,
+              "depth": 405.0
+            },
+            {
+              "landmark_id": 9,
+              "pixel_x": 457,
+              "pixel_y": 71,
+              "depth": 351.0
+            },
+            {
+              "landmark_id": 10,
+              "pixel_x": 389,
+              "pixel_y": 18,
+              "depth": 391.0
+            },
+            {
+              "landmark_id": 11,
+              "pixel_x": 328,
+              "pixel_y": 21,
+              "depth": 408.0
+            },
+            {
+              "landmark_id": 12,
+              "pixel_x": 285,
+              "pixel_y": 33,
+              "depth": 412.0
+            },
+            {
+              "landmark_id": 13,
+              "pixel_x": 476,
+              "pixel_y": 88,
+              "depth": 358.0
+            },
+            {
+              "landmark_id": 14,
+              "pixel_x": 399,
+              "pixel_y": 38,
+              "depth": 378.0
+            },
+            {
+              "landmark_id": 15,
+              "pixel_x": 335,
+              "pixel_y": 53,
+              "depth": 413.0
+            },
+            {
+              "landmark_id": 16,
+              "pixel_x": 290,
+              "pixel_y": 72,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 17,
+              "pixel_x": 482,
+              "pixel_y": 125,
+              "depth": 362.0
+            },
+            {
+              "landmark_id": 18,
+              "pixel_x": 407,
+              "pixel_y": 109,
+              "depth": 361.0
+            },
+            {
+              "landmark_id": 19,
+              "pixel_x": 364,
+              "pixel_y": 129,
+              "depth": 250.0
+            },
+            {
+              "landmark_id": 20,
+              "pixel_x": 337,
+              "pixel_y": 152,
+              "depth": 234.0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "frame_index": 8,
+      "timestamp": "2025-07-11T06:45:32",
+      "hands": [
+        {
+          "hand_id": 0,
+          "handedness": "Right",
+          "hand_confidence": 0.9974231719970703,
+          "min_depth": 232.0,
+          "landmarks": [
+            {
+              "landmark_id": 0,
+              "pixel_x": 552,
+              "pixel_y": 214,
+              "depth": 300.0
+            },
+            {
+              "landmark_id": 1,
+              "pixel_x": 461,
+              "pixel_y": 207,
+              "depth": 275.0
+            },
+            {
+              "landmark_id": 2,
+              "pixel_x": 399,
+              "pixel_y": 174,
+              "depth": 247.0
+            },
+            {
+              "landmark_id": 3,
+              "pixel_x": 357,
+              "pixel_y": 161,
+              "depth": 236.0
+            },
+            {
+              "landmark_id": 4,
+              "pixel_x": 317,
+              "pixel_y": 153,
+              "depth": 235.0
+            },
+            {
+              "landmark_id": 5,
+              "pixel_x": 430,
+              "pixel_y": 70,
+              "depth": 355.0
+            },
+            {
+              "landmark_id": 6,
+              "pixel_x": 374,
+              "pixel_y": 23,
+              "depth": 399.0
+            },
+            {
+              "landmark_id": 7,
+              "pixel_x": 326,
+              "pixel_y": 13,
+              "depth": 403.0
+            },
+            {
+              "landmark_id": 8,
+              "pixel_x": 287,
+              "pixel_y": 15,
+              "depth": 401.0
+            },
+            {
+              "landmark_id": 9,
+              "pixel_x": 455,
+              "pixel_y": 71,
+              "depth": 351.0
+            },
+            {
+              "landmark_id": 10,
+              "pixel_x": 391,
+              "pixel_y": 11,
+              "depth": 393.0
+            },
+            {
+              "landmark_id": 11,
+              "pixel_x": 330,
+              "pixel_y": 8,
+              "depth": 403.0
+            },
+            {
+              "landmark_id": 12,
+              "pixel_x": 285,
+              "pixel_y": 18,
+              "depth": 403.0
+            },
+            {
+              "landmark_id": 13,
+              "pixel_x": 475,
+              "pixel_y": 90,
+              "depth": 357.0
+            },
+            {
+              "landmark_id": 14,
+              "pixel_x": 399,
+              "pixel_y": 41,
+              "depth": 376.0
+            },
+            {
+              "landmark_id": 15,
+              "pixel_x": 335,
+              "pixel_y": 55,
+              "depth": 414.0
+            },
+            {
+              "landmark_id": 16,
+              "pixel_x": 291,
+              "pixel_y": 74,
+              "depth": 244.0
+            },
+            {
+              "landmark_id": 17,
+              "pixel_x": 482,
+              "pixel_y": 129,
+              "depth": 365.0
+            },
+            {
+              "landmark_id": 18,
+              "pixel_x": 408,
+              "pixel_y": 111,
+              "depth": 360.0
+            },
+            {
+              "landmark_id": 19,
+              "pixel_x": 366,
+              "pixel_y": 130,
+              "depth": 250.0
+            },
+            {
+              "landmark_id": 20,
+              "pixel_x": 339,
+              "pixel_y": 151,
+              "depth": 232.0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "frame_index": 9,
+      "timestamp": "2025-07-11T06:45:33",
+      "hands": [
+        {
+          "hand_id": 0,
+          "handedness": "Right",
+          "hand_confidence": 0.9976403713226318,
+          "min_depth": 227.0,
+          "landmarks": [
+            {
+              "landmark_id": 0,
+              "pixel_x": 552,
+              "pixel_y": 208,
+              "depth": 296.0
+            },
+            {
+              "landmark_id": 1,
+              "pixel_x": 458,
+              "pixel_y": 200,
+              "depth": 268.0
+            },
+            {
+              "landmark_id": 2,
+              "pixel_x": 398,
+              "pixel_y": 164,
+              "depth": 244.0
+            },
+            {
+              "landmark_id": 3,
+              "pixel_x": 357,
+              "pixel_y": 148,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 4,
+              "pixel_x": 318,
+              "pixel_y": 140,
+              "depth": 230.0
+            },
+            {
+              "landmark_id": 5,
+              "pixel_x": 435,
+              "pixel_y": 61,
+              "depth": 356.0
+            },
+            {
+              "landmark_id": 6,
+              "pixel_x": 374,
+              "pixel_y": 20,
+              "depth": 399.0
+            },
+            {
+              "landmark_id": 7,
+              "pixel_x": 324,
+              "pixel_y": 17,
+              "depth": 404.0
+            },
+            {
+              "landmark_id": 8,
+              "pixel_x": 287,
+              "pixel_y": 25,
+              "depth": 407.0
+            },
+            {
+              "landmark_id": 9,
+              "pixel_x": 462,
+              "pixel_y": 58,
+              "depth": 353.0
+            },
+            {
+              "landmark_id": 10,
+              "pixel_x": 391,
+              "pixel_y": 12,
+              "depth": 392.0
+            },
+            {
+              "landmark_id": 11,
+              "pixel_x": 329,
+              "pixel_y": 23,
+              "depth": 407.0
+            },
+            {
+              "landmark_id": 12,
+              "pixel_x": 284,
+              "pixel_y": 40,
+              "depth": 418.0
+            },
+            {
+              "landmark_id": 13,
+              "pixel_x": 483,
+              "pixel_y": 75,
+              "depth": 356.0
+            },
+            {
+              "landmark_id": 14,
+              "pixel_x": 404,
+              "pixel_y": 23,
+              "depth": 380.0
+            },
+            {
+              "landmark_id": 15,
+              "pixel_x": 341,
+              "pixel_y": 42,
+              "depth": 410.0
+            },
+            {
+              "landmark_id": 16,
+              "pixel_x": 300,
+              "pixel_y": 65,
+              "depth": 241.0
+            },
+            {
+              "landmark_id": 17,
+              "pixel_x": 488,
+              "pixel_y": 113,
+              "depth": 367.0
+            },
+            {
+              "landmark_id": 18,
+              "pixel_x": 413,
+              "pixel_y": 92,
+              "depth": 359.0
+            },
+            {
+              "landmark_id": 19,
+              "pixel_x": 369,
+              "pixel_y": 112,
+              "depth": 244.0
+            },
+            {
+              "landmark_id": 20,
+              "pixel_x": 342,
+              "pixel_y": 136,
+              "depth": 227.0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "frame_index": 10,
+      "timestamp": "2025-07-11T06:45:33",
+      "hands": [
+        {
+          "hand_id": 0,
+          "handedness": "Right",
+          "hand_confidence": 0.9974664449691772,
+          "min_depth": 226.0,
+          "landmarks": [
+            {
+              "landmark_id": 0,
+              "pixel_x": 548,
+              "pixel_y": 200,
+              "depth": 292.0
+            },
+            {
+              "landmark_id": 1,
+              "pixel_x": 464,
+              "pixel_y": 192,
+              "depth": 266.0
+            },
+            {
+              "landmark_id": 2,
+              "pixel_x": 403,
+              "pixel_y": 154,
+              "depth": 244.0
+            },
+            {
+              "landmark_id": 3,
+              "pixel_x": 361,
+              "pixel_y": 137,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 4,
+              "pixel_x": 320,
+              "pixel_y": 128,
+              "depth": 228.0
+            },
+            {
+              "landmark_id": 5,
+              "pixel_x": 435,
+              "pixel_y": 49,
+              "depth": 359.0
+            },
+            {
+              "landmark_id": 6,
+              "pixel_x": 374,
+              "pixel_y": 15,
+              "depth": 401.0
+            },
+            {
+              "landmark_id": 7,
+              "pixel_x": 324,
+              "pixel_y": 18,
+              "depth": 404.0
+            },
+            {
+              "landmark_id": 8,
+              "pixel_x": 288,
+              "pixel_y": 33,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 9,
+              "pixel_x": 460,
+              "pixel_y": 44,
+              "depth": 352.0
+            },
+            {
+              "landmark_id": 10,
+              "pixel_x": 389,
+              "pixel_y": 6,
+              "depth": 398.0
+            },
+            {
+              "landmark_id": 11,
+              "pixel_x": 330,
+              "pixel_y": 17,
+              "depth": 404.0
+            },
+            {
+              "landmark_id": 12,
+              "pixel_x": 289,
+              "pixel_y": 36,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 13,
+              "pixel_x": 481,
+              "pixel_y": 59,
+              "depth": 352.0
+            },
+            {
+              "landmark_id": 14,
+              "pixel_x": 406,
+              "pixel_y": 12,
+              "depth": 382.0
+            },
+            {
+              "landmark_id": 15,
+              "pixel_x": 346,
+              "pixel_y": 27,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 16,
+              "pixel_x": 306,
+              "pixel_y": 49,
+              "depth": 241.0
+            },
+            {
+              "landmark_id": 17,
+              "pixel_x": 490,
+              "pixel_y": 95,
+              "depth": 362.0
+            },
+            {
+              "landmark_id": 18,
+              "pixel_x": 417,
+              "pixel_y": 79,
+              "depth": 358.0
+            },
+            {
+              "landmark_id": 19,
+              "pixel_x": 376,
+              "pixel_y": 97,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 20,
+              "pixel_x": 350,
+              "pixel_y": 119,
+              "depth": 226.0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "frame_index": 11,
+      "timestamp": "2025-07-11T06:45:33",
+      "hands": [
+        {
+          "hand_id": 0,
+          "handedness": "Right",
+          "hand_confidence": 0.970482587814331,
+          "min_depth": 241.0,
+          "landmarks": [
+            {
+              "landmark_id": 0,
+              "pixel_x": 556,
+              "pixel_y": 172,
+              "depth": 284.0
+            },
+            {
+              "landmark_id": 1,
+              "pixel_x": 477,
+              "pixel_y": 154,
+              "depth": 259.0
+            },
+            {
+              "landmark_id": 2,
+              "pixel_x": 416,
+              "pixel_y": 107,
+              "depth": 241.0
+            },
+            {
+              "landmark_id": 3,
+              "pixel_x": 371,
+              "pixel_y": 79,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 4,
+              "pixel_x": 330,
+              "pixel_y": 65,
+              "depth": 420.0
+            },
+            {
+              "landmark_id": 5,
+              "pixel_x": 439,
+              "pixel_y": 32,
+              "depth": 358.0
+            },
+            {
+              "landmark_id": 6,
+              "pixel_x": 410,
+              "pixel_y": -16,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 7,
+              "pixel_x": 384,
+              "pixel_y": -43,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 8,
+              "pixel_x": 362,
+              "pixel_y": -61,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 9,
+              "pixel_x": 456,
+              "pixel_y": 23,
+              "depth": 352.0
+            },
+            {
+              "landmark_id": 10,
+              "pixel_x": 427,
+              "pixel_y": -29,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 11,
+              "pixel_x": 398,
+              "pixel_y": -54,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 12,
+              "pixel_x": 377,
+              "pixel_y": -68,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 13,
+              "pixel_x": 477,
+              "pixel_y": 23,
+              "depth": 351.0
+            },
+            {
+              "landmark_id": 14,
+              "pixel_x": 450,
+              "pixel_y": -27,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 15,
+              "pixel_x": 423,
+              "pixel_y": -51,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 16,
+              "pixel_x": 400,
+              "pixel_y": -69,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 17,
+              "pixel_x": 501,
+              "pixel_y": 32,
+              "depth": 349.0
+            },
+            {
+              "landmark_id": 18,
+              "pixel_x": 480,
+              "pixel_y": -7,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 19,
+              "pixel_x": 459,
+              "pixel_y": -30,
+              "depth": 0.0
+            },
+            {
+              "landmark_id": 20,
+              "pixel_x": 439,
+              "pixel_y": -50,
+              "depth": 0.0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "frame_index": 12,
+      "timestamp": "2025-07-11T06:45:33",
+      "hands": []
+    },
+    {
+      "frame_index": 13,
+      "timestamp": "2025-07-11T06:45:33",
+      "hands": []
+    },
+    {
+      "frame_index": 14,
+      "timestamp": "2025-07-11T06:45:33",
+      "hands": []
+    },
+    {
+      "frame_index": 15,
+      "timestamp": "2025-07-11T06:45:33",
+      "hands": []
+    },
+    {
+      "frame_index": 16,
+      "timestamp": "2025-07-11T06:45:33",
+      "hands": []
+    },
+    {
+      "frame_index": 17,
+      "timestamp": "2025-07-11T06:45:33",
+      "hands": []
+    },
+    {
+      "frame_index": 18,
+      "timestamp": "2025-07-11T06:45:33",
+      "hands": []
+    },
+    {
+      "frame_index": 19,
+      "timestamp": "2025-07-11T06:45:33",
+      "hands": []
+    },
+    {
+      "frame_index": 20,
+      "timestamp": "2025-07-11T06:45:33",
+      "hands": []
+    },
+    {
+      "frame_index": 21,
+      "timestamp": "2025-07-11T06:45:33",
+      "hands": []
+    },
+    {
+      "frame_index": 22,
+      "timestamp": "2025-07-11T06:45:33",
+      "hands": []
+    },
+    {
+      "frame_index": 23,
+      "timestamp": "2025-07-11T06:45:33",
+      "hands": []
+    },
+    {
+      "frame_index": 24,
+      "timestamp": "2025-07-11T06:45:33",
+      "hands": []
+    },
+    {
+      "frame_index": 25,
+      "timestamp": "2025-07-11T06:45:33",
+      "hands": []
+    },
+    {
+      "frame_index": 26,
+      "timestamp": "2025-07-11T06:45:33",
+      "hands": []
+    },
+    {
+      "frame_index": 27,
+      "timestamp": "2025-07-11T06:45:33",
+      "hands": []
+    },
+    {
+      "frame_index": 28,
+      "timestamp": "2025-07-11T06:45:33",
+      "hands": []
+    },
+    {
+      "frame_index": 29,
+      "timestamp": "2025-07-11T06:45:33",
+      "hands": []
+    },
+    {
+      "frame_index": 30,
+      "timestamp": "2025-07-11T06:45:33",
+      "hands": []
+    },
+    {
+      "frame_index": 31,
+      "timestamp": "2025-07-11T06:45:33",
+      "hands": []
+    },
+    {
+      "frame_index": 32,
+      "timestamp": "2025-07-11T06:45:33",
+      "hands": []
+    },
+    {
+      "frame_index": 33,
+      "timestamp": "2025-07-11T06:45:33",
+      "hands": []
+    },
+    {
+      "frame_index": 34,
+      "timestamp": "2025-07-11T06:45:33",
+      "hands": []
+    },
+    {
+      "frame_index": 35,
+      "timestamp": "2025-07-11T06:45:33",
+      "hands": []
+    },
+    {
+      "frame_index": 36,
+      "timestamp": "2025-07-11T06:45:33",
+      "hands": []
+    },
+    {
+      "frame_index": 37,
+      "timestamp": "2025-07-11T06:45:33",
+      "hands": []
+    },
+    {
+      "frame_index": 38,
+      "timestamp": "2025-07-11T06:45:34",
+      "hands": []
+    }
+  ]
+}

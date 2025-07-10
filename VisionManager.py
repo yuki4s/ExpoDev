@@ -5,12 +5,24 @@ import mediapipe as mp                     # MediaPipeライブラリ（手の�
 import cv2                                 # OpenCVライブラリ（画像処理）
 import numpy as np                         # NumPyライブラリ（数値計算）
 import time                                # 時間制御用標準ライブラリ
+import re
 
 # --- BlackBoard通信設定 ---
 HOST = 'localhost'                         # 接続先のホスト名（ローカル）
 PORT = 9000                                # BlackBoardが待ち受けているポート番号
 CLIENT_NAME = 'VM'                         # このクライアントの名前（Vision Manager）
 s = None                                   # ソケット接続オブジェクト（後で代入）
+
+# ログ記録フラグとwriter
+recording = False
+color_writer = None
+depth_writer = None
+landmark_log = {
+    "experiment_info": {},          # CmdClient から受取った ID,Cond を転記
+    "image_resolution": {"width": 640, "height": 480},
+    "frames": []
+}
+frame_index = 0
 
 # --- MediaPipe ハンドモジュールの初期化 ---
 mp_hands = mp.solutions.hands             # Handsモジュールのクラス
@@ -34,15 +46,98 @@ def safe_wait_for_frames(pipeline, max_retries=5):  # 安全にフレームを�
     raise RuntimeError("フレーム取得に連続で失敗しました。")  # 5回失敗したら例外
 
 # --- BlackBoardからのコマンド受信用スレッド ---
-def receive_from_blackboard():                      # 受信専用スレッド関数
+def receive_from_blackboard():
     global s
+    buffer = ""
     while True:
         try:
-            msg = s.recv(1024).decode()             # メッセージを受信してデコード
-            if msg:
-                print(f"[BlackBoard→VM] {msg}")     # メッセージ内容を表示
-        except Exception:
-            break                                   # エラー発生時はループを抜ける
+            data = s.recv(1024).decode()
+            buffer += data
+            while "\n" in buffer:
+                msg, buffer = buffer.split("\n", 1)
+                msg = msg.strip()
+                if not msg:
+                    continue
+                print(f"[デバッグ] msg内容（repr）: {repr(msg)}")
+                print(f"[BlackBoard→VM] {msg}")
+                # ID受信処理
+                if msg.startswith("ID:"):
+                    try:
+                        parts = dict(p.split(":") for p in msg.split(","))
+                        landmark_log["experiment_info"] = {
+                            "ID": parts["ID"],
+                            "Cond": parts["Cond"]
+                        }
+                        print("[VM] 実験情報を登録しました")
+                    except Exception as e:
+                        print(f"[VM] 実験情報の解析に失敗: {e}")
+                elif msg == "start_log_recording":
+                    start_log_recording()
+                    print("[VM] ログ記録開始")
+                elif msg == "stop_log_recording":
+                    stop_log_recording()
+                    print("[VM] ログ記録終了")
+        except Exception as e:
+            print(f"[VM] 受信中の例外: {e}")
+            break
+
+# --- ログ記録開始関数 ---
+def start_log_recording():
+    global recording, color_writer, depth_writer, frame_index, log_number
+    ID = landmark_log["experiment_info"].get("ID")
+    Cond = landmark_log["experiment_info"].get("Cond")
+    if ID is None or Cond is None:
+        print("[警告] ID/Cond 未設定のため、記録を開始できません")
+        return
+    
+    log_number = get_next_log_number() 
+
+    video_log_dir = "Log/VideoLog"
+    os.makedirs(video_log_dir, exist_ok=True)  # ディレクトリが無ければ作成
+
+    color_path = os.path.join(video_log_dir, f"log{log_number}_ID{ID}_Cond{Cond}_color.mp4")
+    depth_path = os.path.join(video_log_dir, f"log{log_number}_ID{ID}_Cond{Cond}_depth.mp4")
+
+    fourcc = cv2.VideoWriter_fourcc(*'mp4v')
+    color_writer = cv2.VideoWriter(color_path, fourcc, 30, (640,480))
+    depth_writer = cv2.VideoWriter(depth_path, fourcc, 30, (640,480))
+    frame_index = 0
+    recording = True
+    print(f"[VM] ログ記録開始: log{log_number}_ID{ID}_Cond{Cond}")
+
+# --- ログ番号取得関数 ---
+def get_next_log_number():
+    log_dir = "Log/BlackBoardLog"
+    if not os.path.exists(log_dir):
+        os.makedirs(log_dir)
+    existing = [f for f in os.listdir(log_dir) if re.match(r"log\d+_", f)]
+    nums = [int(re.findall(r"log(\d+)_", f)[0]) for f in existing if re.findall(r"log(\d+)_", f)]
+    return max(nums) + 1 if nums else 0
+
+# --- ログ記録終了&書き出し関数 ---#
+import json, os
+def stop_log_recording():
+    global recording, log_number
+    if not recording:
+        return
+    recording = False
+
+    # 映像ログの保存
+    color_writer.release()
+    depth_writer.release()
+
+
+    # IDとCondを取得
+    ID = landmark_log["experiment_info"].get("ID")
+    Cond = landmark_log["experiment_info"].get("Cond")
+    
+    # HandLandmarkログの保存
+    landmark_log_dir = "Log/HandLandmarkLog"
+    os.makedirs(landmark_log_dir, exist_ok=True)  # ディレクトリが無ければ作成
+    json_path = os.path.join(landmark_log_dir, f"log{log_number}_ID{ID}_Cond{Cond}_handLandmarks.json")
+    with open(json_path, "w", encoding="utf-8") as f:
+        json.dump(landmark_log, f, ensure_ascii=False, indent=2)
+    print("[VM] ログ記録を終了し，ファイルを書き出しました") 
 
 # --- ソケット接続処理 ---
 def connect_to_blackboard():                        # BlackBoardに接続する関数
@@ -61,6 +156,8 @@ def connect_to_blackboard():                        # BlackBoardに接続する�
 
 # --- メイン処理 ---
 def main():
+    global frame_index
+    
     connect_to_blackboard()                          # BlackBoardとの接続を確立
 
     print("RealSense カメラを起動中...")
@@ -161,6 +258,35 @@ def main():
                         print(f"[送信] {message}")
                     except Exception as e:
                         print(f"[送信エラー] {e}")               # エラー時に表示
+                
+                # ログ設定がオンの場合のみ記録する
+                if recording:
+                    color_writer.write(image)                  # カラー
+                    depth_writer.write(depth_colormap)         # Depth カラー化
+                    # 手ランドマーク JSON 追記
+                    frame_entry = {
+                        "frame_index": frame_index,
+                        "timestamp": time.strftime("%Y-%m-%dT%H:%M:%S"),
+                        "hands": []
+                    }
+                    if results.multi_hand_landmarks:
+                        for hid, hand in enumerate(results.multi_hand_landmarks):
+                            hand_info = {
+                                "hand_id": hid,
+                                "handedness": results.multi_handedness[hid].classification[0].label,
+                                "hand_confidence": results.multi_handedness[hid].classification[0].score,
+                                "min_depth": float(min_depth) if min_depth else None,
+                                "landmarks": []
+                            }
+                            for lid, lm in enumerate(hand.landmark):
+                                px, py = int(lm.x*w), int(lm.y*h)
+                                d = float(depth_image[py, px]) if 0<=px<w and 0<=py<h else 0.0
+                                hand_info["landmarks"].append(
+                                    {"landmark_id": lid, "pixel_x": px, "pixel_y": py, "depth": d}
+                                )
+                            frame_entry["hands"].append(hand_info)
+                    landmark_log["frames"].append(frame_entry)
+                    frame_index += 1
 
                 cv2.imshow('RealSense D415 with MediaPipe Hands (Color)', image)      # カラー画像表示
                 cv2.imshow('RealSense D415 Depth', depth_colormap)                    # 深度画像表示

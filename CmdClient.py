@@ -25,7 +25,7 @@ def connect_socket():
 def send_command(command):
     if s:
         try:
-            s.send(command.encode())                                           # 文字列をエンコードしてソケットに送信
+            s.send((command + "\n").encode())                                           # 文字列をエンコードしてソケットに送信
             response_label.config(text=f"Sent: {command}")                     # GUIに送信内容を表示
         except Exception as e:
             response_label.config(text=f"[エラー] 送信失敗: {e}")              # 送信エラーを表示
@@ -53,6 +53,7 @@ def send_reset_command():
     timer_label.config(text="Elapsed Time: 00:00", fg='black')                 # タイマー表示をリセット
 
     send_command("BM;reset")                                                   # BlackBoardにリセットコマンド送信
+    send_command("VM;stop_log_recording")                                       # VisionManagerにログ記録終了コマンドを送信                     
     user_id_menu.config(state=NORMAL)                                          # ユーザIDの入力を有効化
     for rb in (condition1_radio, condition2_radio, condition3_radio):          # 条件選択を有効化
         rb.config(state=NORMAL)
@@ -65,8 +66,11 @@ def start_pressed():
     start_time = time.time()                                                   # 現在時刻を開始時間として記録
     update_timer()                                                             # タイマー開始
 
-    am_command = f"BM;ID:{user_id.get()},Cond:{condition.get()}"              # IDと条件を含むコマンド文字列を生成
-    send_command(am_command)                                                  # コマンドを送信
+    bm_command = f"BM;ID:{user_id.get()},Cond:{condition.get()}"              # IDと条件を含むコマンド文字列を生成
+    send_command(bm_command)                                                  # コマンドを送信
+    vm_command = f"VM;ID:{user_id.get()},Cond:{condition.get()}"              # IDと条件を含むコマンド文字列を生成
+    send_command(vm_command)                                                  # コマンドを送信
+    send_command("VM;start_log_recording")                                    # VisionManagerにログ記録開始コマンドを送信
     user_id_menu.config(state=DISABLED)                                        # 入力UIを無効化
     for rb in (condition1_radio, condition2_radio, condition3_radio):          # 条件選択を無効化
         rb.config(state=DISABLED)
