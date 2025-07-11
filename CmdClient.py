@@ -56,8 +56,11 @@ def send_reset_command():
     send_command("BM;reset")                                                   # BlackBoardにリセットコマンド送信
     send_command("VM;stop_log_recording")                                       # VisionManagerにログ記録終了コマンドを送信                     
     user_id_menu.config(state=NORMAL)                                          # ユーザIDの入力を有効化
-    for rb in (condition1_radio, condition2_radio, condition3_radio):          # 条件選択を有効化
-        rb.config(state=NORMAL)
+    
+    # 条件選択を有効化
+    for w in (condition1_radio, condition2_radio,
+            sub1_radio, sub2_radio):
+        w.config(state=NORMAL)
     start_button.config(state=NORMAL, text="Start")                            # スタートボタンを有効化
     reset_button.config(state=NORMAL)                                          # リセットボタンも有効化
 
@@ -67,15 +70,22 @@ def start_pressed():
     start_time = time.time()                                                   # 現在時刻を開始時間として記録
     update_timer()                                                             # タイマー開始
 
-    bm_command = f"BM;ID:{user_id.get()},Cond:{condition.get()}"              # IDと条件を含むコマンド文字列を生成
+    # BehaviorManager には事前説明の有無(cond_sub)は必要なし
+    bm_command = f"BM;ID:{user_id.get()},Cond:{condition.get()},Explanation:{explanation.get()}"              # IDと条件を含むコマンド文字列を生成
     send_command(bm_command)                                                  # コマンドを送信
-    vm_command = f"VM;ID:{user_id.get()},Cond:{condition.get()}"              # IDと条件を含むコマンド文字列を生成
+    
+    # VisionManagerはログファイル名を明確にするためにcond_subも使用する
+    vm_command = f"VM;ID:{user_id.get()},Cond:{condition.get()},Explanation:{explanation.get()}"              # IDと条件を含むコマンド文字列を生成
     send_command(vm_command)                                                  # コマンドを送信
     send_command("VM;start_log_recording")                                    # VisionManagerにログ記録開始コマンドを送信
     # send_command("SM;AM2_00_ShogoNomura_SoundCloud")
+    
     user_id_menu.config(state=DISABLED)                                        # 入力UIを無効化
-    for rb in (condition1_radio, condition2_radio, condition3_radio):          # 条件選択を無効化
-        rb.config(state=DISABLED)
+
+    # 条件選択を無効化
+    for w in (condition1_radio, condition2_radio,
+              sub1_radio, sub2_radio):
+        w.config(state=DISABLED)
     start_button.config(state=DISABLED)                                        # スタートボタンを無効化
     reset_button.config(state=NORMAL)                                          # リセットボタンは有効化
 
@@ -101,18 +111,28 @@ threshold_var = IntVar(value=40)                                               #
 
 # ユーザID & 条件選択
 user_id    = IntVar(value=1)                                                   # ユーザID（整数）の初期値を1
-condition  = StringVar(value="1")                                              # 条件（文字列）の初期値を"1"
+condition  = StringVar(value="1")  
+explanation = StringVar(value="1")   # ←新しい 2 択用                                            # 条件（文字列）の初期値を"1"
 
 Label(root, text="ID (1-100):", font=commonFont).pack()                                      # ID入力用ラベルを配置
 user_id_menu = Spinbox(root, from_=1, to=100, textvariable=user_id, width=5, font=commonFont)  # ID入力用スピンボックス
 user_id_menu.pack(pady=5)
 
+# 副条件用ラジオ追加
+Label(root, text="事前説明の有無:", font=commonFont).pack(pady=(15,0))
+sub1_radio = Radiobutton(root, text="あり", variable=explanation,
+                         value="1", font=commonFont)
+sub1_radio.pack()
+sub2_radio = Radiobutton(root, text="なし", variable=explanation,
+                         value="2", font=commonFont)
+sub2_radio.pack()
+
+# main Condition
+Label(root, text="実験条件:", font=commonFont).pack(pady=(15,0))
 condition1_radio = Radiobutton(root, text="条件1", variable=condition, value="1", font=commonFont)  # 条件1ラジオボタン
 condition1_radio.pack()
 condition2_radio = Radiobutton(root, text="条件2", variable=condition, value="2", font=commonFont)  # 条件2ラジオボタン
 condition2_radio.pack()
-condition3_radio = Radiobutton(root, text="条件3", variable=condition, value="3", font=commonFont)  # 条件3ラジオボタン
-condition3_radio.pack()
 
 # 閾値設定用スピンボックス
 Label(root, text="Alert Threshold (sec):").pack(pady=(20,0))                   # 閾値用ラベル

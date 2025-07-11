@@ -66,7 +66,8 @@ def receive_from_blackboard():
                         parts = dict(p.split(":") for p in msg.split(","))
                         landmark_log["experiment_info"] = {
                             "ID": parts["ID"],
-                            "Cond": parts["Cond"]
+                            "Cond": parts["Cond"],
+                            "Explanation":  parts.get("Explanation", "X")  # ← GUI旧版対応で保険をかけておく
                         }
                         print("[VM] 実験情報を登録しました")
                     except Exception as e:
@@ -88,8 +89,11 @@ def receive_from_blackboard():
 # --- ログ記録開始関数 ---
 def start_log_recording():
     global recording, color_writer, depth_writer, frame_index, log_number
+    info = landmark_log.get("experiment_info", {})
     ID = landmark_log["experiment_info"].get("ID")
     Cond = landmark_log["experiment_info"].get("Cond")
+    Exp  = info.get("Explanation", "X")
+    
     if ID is None or Cond is None:
         print("[警告] ID/Cond 未設定のため、記録を開始できません")
         return
@@ -99,8 +103,8 @@ def start_log_recording():
     video_log_dir = "Log/VideoLog"
     os.makedirs(video_log_dir, exist_ok=True)  # ディレクトリが無ければ作成
 
-    color_path = os.path.join(video_log_dir, f"log{log_number}_ID{ID}_Cond{Cond}_color.mp4")
-    depth_path = os.path.join(video_log_dir, f"log{log_number}_ID{ID}_Cond{Cond}_depth.mp4")
+    color_path = os.path.join(video_log_dir, f"Log{log_number}_Exp{Exp}_Cond{Cond}_color.mp4")
+    depth_path = os.path.join(video_log_dir, f"Log{log_number}_Exp{Exp}_Cond{Cond}_depth.mp4")
 
     fourcc = cv2.VideoWriter_fourcc(*'mp4v')
     color_writer = cv2.VideoWriter(color_path, fourcc, 30, (640,480))
@@ -130,15 +134,15 @@ def stop_log_recording():
     color_writer.release()
     depth_writer.release()
 
-
     # IDとCondを取得
     ID = landmark_log["experiment_info"].get("ID")
     Cond = landmark_log["experiment_info"].get("Cond")
+    Exp = landmark_log["experiment_info"].get("Explanation", "X")
 
     # HandLandmarkログの保存
     landmark_log_dir = "Log/HandLandmarkLog"
     os.makedirs(landmark_log_dir, exist_ok=True)  # ディレクトリが無ければ作成
-    json_path = os.path.join(landmark_log_dir, f"log{log_number}_ID{ID}_Cond{Cond}_handLandmarks.json")
+    json_path = os.path.join(landmark_log_dir, f"Log{log_number}_Exp{Exp}_Cond{Cond}_handLandmarks.json")
     with open(json_path, "w", encoding="utf-8") as f:
         json.dump(landmark_log, f, ensure_ascii=False, indent=2)
     print("[VM] ログ記録を終了し，ファイルを書き出しました") 
