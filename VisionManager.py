@@ -1,3 +1,5 @@
+# VisionManager.py
+
 import socket                              # ソケット通信のための標準ライブラリ
 import threading                           # 並列処理用スレッドライブラリ
 import pyrealsense2 as rs                  # Intel RealSense SDK用Pythonバインディング
@@ -6,6 +8,17 @@ import cv2                                 # OpenCVライブラリ（画像処�
 import numpy as np                         # NumPyライブラリ（数値計算）
 import time                                # 時間制御用標準ライブラリ
 import re
+import subprocess
+
+# --- Gitのブランチ名を取得 ---
+def get_git_branch_name():
+    try:
+        # Gitコマンドを実行してブランチ名を取得
+        # get_git_branch_name().replace("/", "_") として使用することでブランチ名に"/"が含まれる場合のファイルパスエラーを回避できる
+        result = subprocess.check_output(['git', 'rev-parse', '--abbrev-ref', 'HEAD'], stderr=subprocess.DEVNULL)
+        return result.decode().strip()
+    except Exception:
+        return "unknownBranch"
 
 # --- BlackBoard通信設定 ---
 HOST = 'localhost'                         # 接続先のホスト名（ローカル）
@@ -103,8 +116,10 @@ def start_log_recording():
     video_log_dir = "Log/VideoLog"
     os.makedirs(video_log_dir, exist_ok=True)  # ディレクトリが無ければ作成
 
-    color_path = os.path.join(video_log_dir, f"Log{log_number}_Exp{Exp}_Cond{Cond}_color.mp4")
-    depth_path = os.path.join(video_log_dir, f"Log{log_number}_Exp{Exp}_Cond{Cond}_depth.mp4")
+    branch_name = get_git_branch_name().replace("/", "_")  # ← ブランチ名取得
+    nums = []
+    color_path = os.path.join(video_log_dir, f"{branch_name}_Log{log_number}_ID{ID}_Exp{Exp}_Cond{Cond}_color.mp4")
+    depth_path = os.path.join(video_log_dir, f"{branch_name}_Log{log_number}_ID{ID}_Exp{Exp}_Cond{Cond}_depth.mp4")
 
     fourcc = cv2.VideoWriter_fourcc(*'mp4v')
     color_writer = cv2.VideoWriter(color_path, fourcc, 30, (640,480))
@@ -114,13 +129,18 @@ def start_log_recording():
     print(f"[VM] ログ記録開始: log{log_number}_ID{ID}_Cond{Cond}")
 
 # --- ログ番号取得関数 ---
-def get_next_log_number():
-    log_dir = "Log/BlackBoardLog"
-    if not os.path.exists(log_dir):
-        os.makedirs(log_dir)
-    existing = [f for f in os.listdir(log_dir) if re.match(r"log\d+_", f)]
-    nums = [int(re.findall(r"log(\d+)_", f)[0]) for f in existing if re.findall(r"log(\d+)_", f)]
-    return max(nums) + 1 if nums else 0
+def get_next_log_number():  # ログ番号を取得する関数（ブランチごとに連番を付与）
+    log_dir = "Log/BlackBoardLog"  # ログファイルが保存されているディレクトリのパス
+    os.makedirs(log_dir, exist_ok=True)  # ディレクトリが存在しない場合は作成する（既にある場合は何もしない）
+    
+    branch_name = get_git_branch_name().replace("/", "_")  # 現在のGitブランチ名を取得し、ファイル名に使えない"/"を"_"に置換
+    nums = []  # ログ番号を格納するリストを初期化
+    for fname in os.listdir(log_dir):  # ログディレクトリ内のすべてのファイルを走査
+        m = re.search(rf"{re.escape(branch_name)}_log(\d+)_", fname)  # ブランチ名に対応するログファイルの番号を抽出する
+        if m:  # 正規表現にマッチした場合
+            nums.append(int(m.group(1)))  # 抽出したログ番号を整数に変換してリストに追加
+
+    return max(nums) if nums else 1  # ログ番号があれば最大値に+1、なければ1を返す
 
 # --- ログ記録終了&書き出し関数 ---#
 import json, os
@@ -142,7 +162,9 @@ def stop_log_recording():
     # HandLandmarkログの保存
     landmark_log_dir = "Log/HandLandmarkLog"
     os.makedirs(landmark_log_dir, exist_ok=True)  # ディレクトリが無ければ作成
-    json_path = os.path.join(landmark_log_dir, f"Log{log_number}_Exp{Exp}_Cond{Cond}_handLandmarks.json")
+
+    branch_name = get_git_branch_name().replace("/", "_")  # ← ブランチ名取得
+    json_path = os.path.join(landmark_log_dir, f"{branch_name}_Log{log_number}_ID{ID}_Exp{Exp}_Cond{Cond}_handLandmarks.json")
     with open(json_path, "w", encoding="utf-8") as f:
         json.dump(landmark_log, f, ensure_ascii=False, indent=2)
     print("[VM] ログ記録を終了し，ファイルを書き出しました") 
