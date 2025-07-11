@@ -3,6 +3,7 @@ import threading  # 並列処理を行うためのスレッドモジュール
 import serial.tools.list_ports  # 接続されているシリアルポート一覧を取得するためのモジュール
 import serial  # Arduinoとのシリアル通信に使用するモジュール
 import time  # スリープや時間処理に使用
+import os
 
 # --- BlackBoard通信設定 ---
 HOST = 'localhost'  # BlackBoardのホスト名（ローカル接続）
@@ -58,6 +59,17 @@ def receive_from_blackboard():
                 print(f"[BlackBoard→{CLIENT_NAME}] {msg}")  # BlackBoardから受信した内容を表示
                 content = msg  # 内容をそのまま保持（将来的なパースにも対応可能）
                 print(f"[BM] コマンド抽出: {content}")
+                
+                if content == "CMD;shutdown":
+                    print("[BM] shutdown コマンドを受信しました。プログラムを終了します。")
+                    if arduino:
+                        arduino.close()
+                        print("[BM] Arduinoとの接続を閉じました。")
+                    if s:
+                        s.close()
+                        print("[BM] BlackBoardとの接続を閉じました。")
+                    os._exit(0)
+
                 if arduino and arduino.is_open:  # Arduinoが接続されていれば
                     try:
                         arduino.write((content + '\n').encode())  # Arduinoへコマンドを送信

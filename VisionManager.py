@@ -1,113 +1,214 @@
-import socket  # BlackBoardとの通信に用いるソケット通信モジュール
-import threading  # 通信を非同期で処理するためのスレッド制御モジュール
-import pyrealsense2 as rs  # RealSenseカメラ制御用のライブラリ
-import mediapipe as mp  # 手の検出・追跡に用いるMediaPipeライブラリ
-import cv2  # 画像処理および表示に用いるOpenCVライブラリ
-import numpy as np  # 配列や数値計算を扱うNumPyライブラリ
-import time  # 時間待ち処理などに使用
+import socket                              # ソケット通信のための標準ライブラリ
+import threading                           # 並列処理用スレッドライブラリ
+import pyrealsense2 as rs                  # Intel RealSense SDK用Pythonバインディング
+import mediapipe as mp                     # MediaPipeライブラリ（手の検出など）
+import cv2                                 # OpenCVライブラリ（画像処理）
+import numpy as np                         # NumPyライブラリ（数値計算）
+import time                                # 時間制御用標準ライブラリ
+import re
 
 # --- BlackBoard通信設定 ---
-HOST = 'localhost'  # BlackBoardのホスト名（ローカル）
-PORT = 9000  # BlackBoardのポート番号
-CLIENT_NAME = 'VM'  # このクライアント（VisionManager）の名前
-s = None  # ソケットオブジェクトを格納する変数（後で初期化）
+HOST = 'localhost'                         # 接続先のホスト名（ローカル）
+PORT = 9000                                # BlackBoardが待ち受けているポート番号
+CLIENT_NAME = 'VM'                         # このクライアントの名前（Vision Manager）
+s = None                                   # ソケット接続オブジェクト（後で代入）
+
+# ログ記録フラグとwriter
+recording = False
+color_writer = None
+depth_writer = None
+landmark_log = {
+    "experiment_info": {},          # CmdClient から受取った ID,Cond を転記
+    "image_resolution": {"width": 640, "height": 480},
+    "frames": []
+}
+frame_index = 0
 
 # --- MediaPipe ハンドモジュールの初期化 ---
-mp_hands = mp.solutions.hands  # 手検出用モジュール
-mp_drawing = mp.solutions.drawing_utils  # ランドマーク描画ユーティリティ
+mp_hands = mp.solutions.hands             # Handsモジュールのクラス
+mp_drawing = mp.solutions.drawing_utils   # ランドマーク描画ユーティリティ
 mp_drawing_styles = mp.solutions.drawing_styles  # 描画スタイル設定
 
 # --- RealSense パイプラインの初期化 ---
-pipeline = rs.pipeline()  # RealSenseのデータ取得用パイプラインを作成
-config = rs.config()  # ストリーム設定オブジェクトを作成
-config.enable_stream(rs.stream.color, 640, 480, rs.format.bgr8, 30)  # カラーストリーム設定（解像度・fps）
-config.enable_stream(rs.stream.depth, 640, 480, rs.format.z16, 30)  # 深度ストリーム設定（解像度・fps）
+pipeline = rs.pipeline()                   # RealSenseのパイプラインオブジェクト作成
+config = rs.config()                       # ストリーミング設定オブジェクト作成
+config.enable_stream(rs.stream.color, 640, 480, rs.format.bgr8, 30)  # カラーストリーム設定
+config.enable_stream(rs.stream.depth, 640, 480, rs.format.z16, 30)  # 深度ストリーム設定
 
 # --- フレーム取得関数 ---
-def safe_wait_for_frames(pipeline, max_retries=5):  # フレーム取得を試みる関数（最大5回までリトライ）
+def safe_wait_for_frames(pipeline, max_retries=5):  # 安全にフレームを取得する関数（リトライ付き）
     for i in range(max_retries):
         try:
-            return pipeline.wait_for_frames()  # フレーム取得に成功したら返す
+            return pipeline.wait_for_frames()       # フレーム取得に成功したら返す
         except RuntimeError as e:
-            print(f"[警告] フレームの取得に失敗（{i+1}/{max_retries}）: {e}")  # 失敗時に警告を表示
-            time.sleep(0.5)  # 少し待ってリトライ
-    raise RuntimeError("フレーム取得に連続で失敗しました。")  # 最大リトライ回数を超えたら例外を送出
+            print(f"[警告] フレームの取得に失敗（{i+1}/{max_retries}）: {e}")  # エラー表示
+            time.sleep(0.5)                          # 少し待って再試行
+    raise RuntimeError("フレーム取得に連続で失敗しました。")  # 5回失敗したら例外
 
 # --- BlackBoardからのコマンド受信用スレッド ---
-def receive_from_blackboard():  # 非同期でBlackBoardからの受信を行う関数
+def receive_from_blackboard():
     global s
+    buffer = ""
     while True:
         try:
-            msg = s.recv(1024).decode()  # ソケットからのメッセージ受信
-            if msg:
-                print(f"[BlackBoard→VM] {msg}")  # コンソールに出力
-        except Exception:
-            break  # 受信エラーが起きたらスレッド終了
+            data = s.recv(1024).decode()
+            buffer += data
+            while "\n" in buffer:
+                msg, buffer = buffer.split("\n", 1)
+                msg = msg.strip()
+                if not msg:
+                    continue
+                print(f"[デバッグ] msg内容（repr）: {repr(msg)}")
+                print(f"[BlackBoard→VM] {msg}")
+                # ID受信処理
+                if msg.startswith("ID:"):
+                    try:
+                        parts = dict(p.split(":") for p in msg.split(","))
+                        landmark_log["experiment_info"] = {
+                            "ID": parts["ID"],
+                            "Cond": parts["Cond"]
+                        }
+                        print("[VM] 実験情報を登録しました")
+                    except Exception as e:
+                        print(f"[VM] 実験情報の解析に失敗: {e}")
+                elif msg == "start_log_recording":
+                    start_log_recording()
+                    print("[VM] ログ記録開始")
+                elif msg == "stop_log_recording":
+                    stop_log_recording()
+                    print("[VM] ログ記録終了")
+                elif msg == "CMD;shutdown":
+                    print("[VM] shutdown コマンドを受信しました。ログを保存してから終了します。")
+                    stop_log_recording()
+                    os._exit(0)
+        except Exception as e:
+            print(f"[VM] 受信中の例外: {e}")
+            break
+
+# --- ログ記録開始関数 ---
+def start_log_recording():
+    global recording, color_writer, depth_writer, frame_index, log_number
+    ID = landmark_log["experiment_info"].get("ID")
+    Cond = landmark_log["experiment_info"].get("Cond")
+    if ID is None or Cond is None:
+        print("[警告] ID/Cond 未設定のため、記録を開始できません")
+        return
+    
+    log_number = get_next_log_number() 
+
+    video_log_dir = "Log/VideoLog"
+    os.makedirs(video_log_dir, exist_ok=True)  # ディレクトリが無ければ作成
+
+    color_path = os.path.join(video_log_dir, f"log{log_number}_ID{ID}_Cond{Cond}_color.mp4")
+    depth_path = os.path.join(video_log_dir, f"log{log_number}_ID{ID}_Cond{Cond}_depth.mp4")
+
+    fourcc = cv2.VideoWriter_fourcc(*'mp4v')
+    color_writer = cv2.VideoWriter(color_path, fourcc, 30, (640,480))
+    depth_writer = cv2.VideoWriter(depth_path, fourcc, 30, (640,480))
+    frame_index = 0
+    recording = True
+    print(f"[VM] ログ記録開始: log{log_number}_ID{ID}_Cond{Cond}")
+
+# --- ログ番号取得関数 ---
+def get_next_log_number():
+    log_dir = "Log/BlackBoardLog"
+    if not os.path.exists(log_dir):
+        os.makedirs(log_dir)
+    existing = [f for f in os.listdir(log_dir) if re.match(r"log\d+_", f)]
+    nums = [int(re.findall(r"log(\d+)_", f)[0]) for f in existing if re.findall(r"log(\d+)_", f)]
+    return max(nums) + 1 if nums else 0
+
+# --- ログ記録終了&書き出し関数 ---#
+import json, os
+def stop_log_recording():
+    global recording, log_number
+    if not recording:
+        return
+    recording = False
+
+    # 映像ログの保存
+    color_writer.release()
+    depth_writer.release()
+
+
+    # IDとCondを取得
+    ID = landmark_log["experiment_info"].get("ID")
+    Cond = landmark_log["experiment_info"].get("Cond")
+
+    # HandLandmarkログの保存
+    landmark_log_dir = "Log/HandLandmarkLog"
+    os.makedirs(landmark_log_dir, exist_ok=True)  # ディレクトリが無ければ作成
+    json_path = os.path.join(landmark_log_dir, f"log{log_number}_ID{ID}_Cond{Cond}_handLandmarks.json")
+    with open(json_path, "w", encoding="utf-8") as f:
+        json.dump(landmark_log, f, ensure_ascii=False, indent=2)
+    print("[VM] ログ記録を終了し，ファイルを書き出しました") 
 
 # --- ソケット接続処理 ---
-def connect_to_blackboard():  # BlackBoardへの接続処理
+def connect_to_blackboard():                        # BlackBoardに接続する関数
     global s
-    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)  # TCPソケットを作成
-    s.connect((HOST, PORT))  # 指定ホスト・ポートに接続
+    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)  # ソケット作成
+    s.connect((HOST, PORT))                          # 指定ホストとポートに接続
 
-    local_ip, local_port = s.getsockname()  # 自分のIPとポートを取得
-    init_msg = f"{CLIENT_NAME};{local_ip}:{local_port}"  # 初期化メッセージを生成
-    s.sendall(init_msg.encode())  # 初期化メッセージを送信
+    local_ip, local_port = s.getsockname()           # 自分のIPとポートを取得
+    init_msg = f"{CLIENT_NAME};{local_ip}:{local_port}"  # 初期接続メッセージ作成
+    s.sendall(init_msg.encode())                     # 初期メッセージを送信
 
     print(f"[接続] BlackBoardに '{CLIENT_NAME}'（{local_ip}:{local_port}）として接続済み")
 
-    recv_thread = threading.Thread(target=receive_from_blackboard, daemon=True)  # 受信スレッドを生成（デーモンモード）
-    recv_thread.start()  # スレッドを開始
+    recv_thread = threading.Thread(target=receive_from_blackboard, daemon=True)  # 受信スレッド開始
+    recv_thread.start()
 
 # --- メイン処理 ---
 def main():
-    connect_to_blackboard()  # BlackBoardに接続
+    global frame_index
+    
+    connect_to_blackboard()                          # BlackBoardとの接続を確立
 
     print("RealSense カメラを起動中...")
     try:
-        pipeline.start(config)  # RealSenseストリームを開始
+        pipeline.start(config)                       # RealSenseのストリーム開始
         print("RealSense カメラが起動しました。")
     except Exception as e:
-        print("RealSense カメラの起動に失敗しました:", e)  # 起動失敗時はエラー表示して終了
+        print("RealSense カメラの起動に失敗しました:", e)
         return
 
     try:
-        with mp_hands.Hands(  # MediaPipeの手検出インスタンスを初期化
-            model_complexity=1,  # モデルの複雑度（高）
-            min_detection_confidence=0.5,  # 手検出の信頼度閾値
-            min_tracking_confidence=0.5,  # 追跡の信頼度閾値
-            max_num_hands=2  # 検出する手の最大数
+        with mp_hands.Hands(                          # MediaPipeのHandsモジュールを起動
+            model_complexity=1,
+            min_detection_confidence=0.5,
+            min_tracking_confidence=0.5,
+            max_num_hands=2
         ) as hands:
 
-            while True:  # メインループ
+            while True:                               # 無限ループで映像処理
                 try:
-                    frames = safe_wait_for_frames(pipeline)  # カメラからフレームを取得
+                    frames = safe_wait_for_frames(pipeline)  # フレーム取得（リトライ付き）
                 except RuntimeError as e:
                     print("[エラー]", e)
-                    break  # 取得に失敗したらループを抜ける
+                    break
 
-                color_frame = frames.get_color_frame()  # カラーフレーム取得
-                depth_frame = frames.get_depth_frame()  # 深度フレーム取得
+                color_frame = frames.get_color_frame()       # カラーフレーム取得
+                depth_frame = frames.get_depth_frame()       # 深度フレーム取得
                 if not color_frame or not depth_frame:
-                    continue  # どちらかが欠けていればスキップ
+                    continue                                # どちらか欠けていたらスキップ
 
-                image = np.asanyarray(color_frame.get_data())  # カラー画像をnumpy配列に変換
-                image_rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)  # RGBに変換（MediaPipe用）
-                depth_image = np.asanyarray(depth_frame.get_data())  # 深度画像をnumpy配列に変換
-                depth_colormap = cv2.applyColorMap(  # 深度画像をカラーマップで可視化
+                image = np.asanyarray(color_frame.get_data())       # カラーフレームをNumPy配列に変換
+                image_rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)  # RGB形式に変換
+                depth_image = np.asanyarray(depth_frame.get_data()) # 深度フレームもNumPy配列に変換
+                depth_colormap = cv2.applyColorMap(                 # 深度マップにカラーマップ適用
                     cv2.convertScaleAbs(depth_image, alpha=0.03),
                     cv2.COLORMAP_JET
                 )
 
-                image_rgb.flags.writeable = False  # MediaPipe処理中は書き込み禁止に設定
-                results = hands.process(image_rgb)  # 手検出・ランドマーク推定
-                image.flags.writeable = True  # 書き込み可能に戻す
+                image_rgb.flags.writeable = False                   # MediaPipe処理用に読み取り専用化
+                results = hands.process(image_rgb)                 # 手のランドマーク検出
+                image.flags.writeable = True                       # 再び書き込み可能に戻す
 
-                min_depth = None  # フレーム全体での最小深度を初期化
+                min_depth = None                                    # 最小深度初期化
 
-                if results.multi_hand_landmarks:  # 手が検出された場合
-                    for hand_landmarks in results.multi_hand_landmarks:  # 各手について
-                        mp_drawing.draw_landmarks(  # ランドマークと接続線を描画
+                if results.multi_hand_landmarks:                   # 検出された手がある場合
+                    for hand_landmarks in results.multi_hand_landmarks:
+                        mp_drawing.draw_landmarks(                 # 手のランドマークを描画
                             image,
                             hand_landmarks,
                             mp_hands.HAND_CONNECTIONS,
@@ -115,24 +216,24 @@ def main():
                             mp_drawing_styles.get_default_hand_connections_style()
                         )
 
-                        depth_values = []  # 各ランドマークの深度値を保存
-                        h, w, _ = image.shape  # 画像のサイズを取得
-                        for lm in hand_landmarks.landmark:  # 各ランドマークについて
-                            cx, cy = int(lm.x * w), int(lm.y * h)  # ピクセル座標に変換
-                            if 0 <= cx < w and 0 <= cy < h:  # 範囲内か確認
-                                d = depth_image[cy, cx]  # 対応する深度値を取得
+                        depth_values = []                          # 深度値リスト
+                        h, w, _ = image.shape
+                        for lm in hand_landmarks.landmark:         # 各ランドマークごとに処理
+                            cx, cy = int(lm.x * w), int(lm.y * h)  # 画像上のピクセル座標に変換
+                            if 0 <= cx < w and 0 <= cy < h:
+                                d = depth_image[cy, cx]            # 深度値を取得
                                 if d > 0:
-                                    depth_values.append(d)  # 有効な値のみ追加
+                                    depth_values.append(d)
 
                         if depth_values:
-                            local_min_depth = float(np.min(depth_values))  # この手における最小深度
+                            local_min_depth = float(np.min(depth_values))  # 最小深度を計算
                             if min_depth is None or local_min_depth < min_depth:
-                                min_depth = local_min_depth  # フレーム全体の最小深度を更新
+                                min_depth = local_min_depth        # フレーム全体の最小深度を更新
 
-                            text = f"Min. Depth: {local_min_depth:.1f}mm"  # 表示用の深度テキスト
+                            text = f"Min. Depth: {local_min_depth:.1f}mm"  # 表示テキスト作成
                             cx = int(np.mean([lm.x for lm in hand_landmarks.landmark]) * w)
                             cy = int(np.mean([lm.y for lm in hand_landmarks.landmark]) * h)
-                            cv2.putText(  # 深度を画像に表示
+                            cv2.putText(                          # 最小深度を画面に表示
                                 image,
                                 text,
                                 (cx - 70, cy - 50),
@@ -143,7 +244,7 @@ def main():
                                 cv2.LINE_AA
                             )
                         else:
-                            cv2.putText(  # 深度が取得できなかった場合
+                            cv2.putText(                          # 深度取得失敗時の表示
                                 image,
                                 "Min. Depth: N/A",
                                 (50, 50),
@@ -156,27 +257,55 @@ def main():
 
                 if min_depth is not None:
                     try:
-                        message = f"BM;Depth:{min_depth:.1f}\n"  # 最小深度をBlackBoardに送信
-                        s.sendall(message.encode())
+                        message = f"BM;Depth:{min_depth:.1f}\n"   # 最小深度をBlackBoard形式に整形
+                        s.sendall(message.encode())               # メッセージをBlackBoardに送信
                         print(f"[送信] {message}")
                     except Exception as e:
-                        print(f"[送信エラー] {e}")  # 通信失敗時の表示
+                        print(f"[送信エラー] {e}")               # エラー時に表示
+                
+                # ログ設定がオンの場合のみ記録する
+                if recording:
+                    color_writer.write(image)                  # カラー
+                    depth_writer.write(depth_colormap)         # Depth カラー化
+                    # 手ランドマーク JSON 追記
+                    frame_entry = {
+                        "frame_index": frame_index,
+                        "timestamp": time.strftime("%Y-%m-%dT%H:%M:%S"),
+                        "hands": []
+                    }
+                    if results.multi_hand_landmarks:
+                        for hid, hand in enumerate(results.multi_hand_landmarks):
+                            hand_info = {
+                                "hand_id": hid,
+                                "handedness": results.multi_handedness[hid].classification[0].label,
+                                "hand_confidence": results.multi_handedness[hid].classification[0].score,
+                                "min_depth": float(min_depth) if min_depth else None,
+                                "landmarks": []
+                            }
+                            for lid, lm in enumerate(hand.landmark):
+                                px, py = int(lm.x*w), int(lm.y*h)
+                                d = float(depth_image[py, px]) if 0<=px<w and 0<=py<h else 0.0
+                                hand_info["landmarks"].append(
+                                    {"landmark_id": lid, "pixel_x": px, "pixel_y": py, "depth": d}
+                                )
+                            frame_entry["hands"].append(hand_info)
+                    landmark_log["frames"].append(frame_entry)
+                    frame_index += 1
 
-                # 表示ウィンドウ
-                cv2.imshow('RealSense D415 with MediaPipe Hands (Color)', image)  # カラー画像
-                cv2.imshow('RealSense D415 Depth', depth_colormap)  # 深度画像（カラーマップ）
+                cv2.imshow('RealSense D415 with MediaPipe Hands (Color)', image)      # カラー画像表示
+                cv2.imshow('RealSense D415 Depth', depth_colormap)                    # 深度画像表示
 
-                if cv2.waitKey(5) & 0xFF == 27:  # ESCキーでループ終了
+                if cv2.waitKey(5) & 0xFF == 27:     # ESCキーで終了
                     break
 
     finally:
         print("RealSense カメラを停止中...")
-        pipeline.stop()  # RealSenseストリームを停止
+        pipeline.stop()                            # RealSenseのストリーム停止
         print("RealSense カメラが停止しました。")
-        cv2.destroyAllWindows()  # OpenCVのウィンドウを閉じる
+        cv2.destroyAllWindows()                    # すべてのウィンドウを閉じる
         if s:
-            s.close()  # ソケットを閉じる
+            s.close()                              # ソケットをクローズ
             print("[切断] BlackBoardとの接続を閉じました。")
 
-if __name__ == "__main__":
-    main()  # スクリプトが直接実行されたときのみ main() を呼び出す
+if __name__ == "__main__":                         # このファイルが直接実行された場合
+    main()                                         # メイン関数を呼び出す
