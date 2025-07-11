@@ -18,5 +18,8 @@ start "BehaviorManager" cmd /c "call .\VE\Scripts\activate && python BehaviorMan
 :: VisionManager.py を新しいウィンドウで起動
 start "VisionManager" cmd /c "call .\VE\Scripts\activate && python VisionManager.py"
 
+:: SoundManager.py を新しいウィンドウで起動
+:: start "SoundManager" cmd /c "call .\VE\Scripts\activate && python SoundManager.py"
+
 :: CmdClient.py を新しいウィンドウで起動
 start  "CmdClient" cmd /c "call .\VE\Scripts\activate && python CmdClient.py"

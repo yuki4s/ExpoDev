@@ -12,6 +12,16 @@ import glob                                    # ファイル検索用
 import re                                      # 正規表現
 import json                                    # 設定ファイル読み込み用
 import time                                    # 待機処理用
+import subprocess
+
+# --- Gitのブランチ名を取得 ---
+def get_git_branch_name():
+    try:
+        # Gitコマンドを実行してブランチ名を取得
+        result = subprocess.check_output(['git', 'rev-parse', '--abbrev-ref', 'HEAD'], stderr=subprocess.DEVNULL)
+        return result.decode().strip()
+    except Exception:
+        return "unknownBranch"
 
 # --- ログ記録用関数 ---
 def initialize_blackboard_logging():
@@ -45,16 +55,17 @@ def initialize_blackboard_logging():
     logger.addHandler(console_handler)                  # ハンドラ追加
 
     if save_blackboard_logs:                            # ログ保存がONの場合
-        existing_logs = glob.glob(os.path.join(log_dir, "log*_blackBoard.log"))  # 既存ログファイルを探索
+        branch_name = get_git_branch_name()             # 現在のGitブランチ名を取得
+        existing_logs = glob.glob(os.path.join(log_dir, f"{branch_name}_log*_blackBoard.log"))  # 既存ログファイルを探索
         max_index = 0                                   # ログ番号最大値を初期化
         for log_file in existing_logs:                  # 既存ログを走査
-            match = re.match(r".*log(\d+)_blackBoard\.log$", log_file)  # ログ番号抽出
+            match = re.match(rf".*{re.escape(branch_name)}_log(\d+)_blackBoard\.log$", log_file)  # ログ番号抽出
             if match:
                 idx = int(match.group(1))               # 抽出番号をint変換
                 if idx > max_index: max_index = idx     # 最大値更新
 
         next_index = max_index + 1                     # 次に使うログ番号決定
-        log_filename = os.path.join(log_dir, f"log{next_index}_blackBoard.log")  # ログファイル名作成
+        log_filename = os.path.join(log_dir, f"{branch_name}_log{next_index}_blackBoard.log")  # ブランチ名入りファイル名
         print(f"[ログ初期化] ログファイル: {log_filename}")                     # ログファイル名を表示
 
         file_handler = logging.FileHandler(log_filename, encoding="utf-8")  # ファイル用ハンドラ作成
