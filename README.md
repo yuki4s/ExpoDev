@@ -63,6 +63,22 @@ RGBDカメラ([Intel Realsense D435](https://www.intelrealsense.com/depth-camera
 3. 実行。    
    `RunAll.bat`で一括して動作させることができる。終了する際は GUI で「Exit All」を選択し、確認画面で「はい」を押すと自動で終了する。
 
+## 実験で使う人は読んでおくれ
+1. 上記の環境構築を終わらせる。
+
+2. ExpoDevフォルダを開いて右クリック「右クリック」→「ターミナルで開く」で以下を実行する。
+   - キーウィ実験の場合
+      ```
+      git fetch origin kiwi
+      git checkout kiwi    
+      ```    
+   - ペンギン実験の場合
+      ```
+      git fetch origin penguin
+      git checkout penguin    
+      ```    
+
+3. `RunAll.bat`で実行。 
 
 ## 開発者用
 1. 上記のセットアップを終わらせる。
