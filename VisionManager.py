@@ -126,7 +126,7 @@ def start_log_recording():
     depth_writer = cv2.VideoWriter(depth_path, fourcc, 30, (640,480))
     frame_index = 0
     recording = True
-    print(f"[VM] ログ記録開始: log{log_number}_ID{ID}_Cond{Cond}")
+    print(f"[VM] ログ記録開始: {branch_name}_log{log_number}_ID{ID}_Exp{Exp}_Cond{Cond}")
 
 # --- ログ番号取得関数 ---
 def get_next_log_number():  # ログ番号を取得する関数（ブランチごとに連番を付与）
@@ -140,7 +140,7 @@ def get_next_log_number():  # ログ番号を取得する関数（ブランチ�
         if m:  # 正規表現にマッチした場合
             nums.append(int(m.group(1)))  # 抽出したログ番号を整数に変換してリストに追加
 
-    return max(nums) if nums else 1  # ログ番号があれば最大値に+1、なければ1を返す
+    return max(nums) if nums else 1  # ログ番号があれば最大値、なければ1を返す
 
 # --- ログ記録終了&書き出し関数 ---#
 import json, os
