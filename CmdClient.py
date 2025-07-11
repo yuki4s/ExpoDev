@@ -1,4 +1,5 @@
 from tkinter import *                          # Tkinter GUIモジュールの全機能をインポート
+from tkinter import messagebox  # ポップアップ表示用
 import socket                                  # ソケット通信を行うための標準ライブラリ
 import time                                    # 時間計測用の標準ライブラリ
 
@@ -71,12 +72,19 @@ def start_pressed():
     vm_command = f"VM;ID:{user_id.get()},Cond:{condition.get()}"              # IDと条件を含むコマンド文字列を生成
     send_command(vm_command)                                                  # コマンドを送信
     send_command("VM;start_log_recording")                                    # VisionManagerにログ記録開始コマンドを送信
-    send_command("SM;AM2_00_ShogoNomura_SoundCloud")
+    # send_command("SM;AM2_00_ShogoNomura_SoundCloud")
     user_id_menu.config(state=DISABLED)                                        # 入力UIを無効化
     for rb in (condition1_radio, condition2_radio, condition3_radio):          # 条件選択を無効化
         rb.config(state=DISABLED)
     start_button.config(state=DISABLED)                                        # スタートボタンを無効化
     reset_button.config(state=NORMAL)                                          # リセットボタンは有効化
+
+# --- 全システムの終了処理 ---
+def exit_all():
+    confirm = messagebox.askyesno("確認", "すべてのプロセスを終了しますか？")
+    if confirm:
+        send_command("CMD;shutdown")
+        root.destroy()  # GUIも終了
 
 # --- ESCキーによる強制終了 ---
 def handle_esc(event):
@@ -85,8 +93,9 @@ def handle_esc(event):
 # --- GUI 初期化 ---
 root = Tk()                                                                    # メインウィンドウの作成
 root.title("CmdClient GUI")                                                    # ウィンドウタイトルを設定
-root.geometry("450x500")                                                       # ウィンドウサイズを指定
+root.geometry("500x550")                                                       # ウィンドウサイズを指定
 root.bind("<Escape>", handle_esc)                                              # ESCキーで終了できるようにバインド
+commonFont = ("Helvetica", 12)  # フォント名とサイズを指定
 
 threshold_var = IntVar(value=40)                                               # 閾値（秒）の初期値を40に設定
 
@@ -94,31 +103,35 @@ threshold_var = IntVar(value=40)                                               #
 user_id    = IntVar(value=1)                                                   # ユーザID（整数）の初期値を1
 condition  = StringVar(value="1")                                              # 条件（文字列）の初期値を"1"
 
-Label(root, text="ID (1-100):").pack()                                         # ID入力用ラベルを配置
-user_id_menu = Spinbox(root, from_=1, to=100, textvariable=user_id, width=5)  # ID入力用スピンボックス
+Label(root, text="ID (1-100):", font=commonFont).pack()                                      # ID入力用ラベルを配置
+user_id_menu = Spinbox(root, from_=1, to=100, textvariable=user_id, width=5, font=commonFont)  # ID入力用スピンボックス
 user_id_menu.pack(pady=5)
 
-condition1_radio = Radiobutton(root, text="条件1", variable=condition, value="1")  # 条件1ラジオボタン
+condition1_radio = Radiobutton(root, text="条件1", variable=condition, value="1", font=commonFont)  # 条件1ラジオボタン
 condition1_radio.pack()
-condition2_radio = Radiobutton(root, text="条件2", variable=condition, value="2")  # 条件2ラジオボタン
+condition2_radio = Radiobutton(root, text="条件2", variable=condition, value="2", font=commonFont)  # 条件2ラジオボタン
 condition2_radio.pack()
-condition3_radio = Radiobutton(root, text="条件3", variable=condition, value="3")  # 条件3ラジオボタン
+condition3_radio = Radiobutton(root, text="条件3", variable=condition, value="3", font=commonFont)  # 条件3ラジオボタン
 condition3_radio.pack()
 
 # 閾値設定用スピンボックス
 Label(root, text="Alert Threshold (sec):").pack(pady=(20,0))                   # 閾値用ラベル
-threshold_spinbox = Spinbox(root, from_=1, to=3600, textvariable=threshold_var, width=5)  # 閾値設定
+threshold_spinbox = Spinbox(root, from_=1, to=3600, textvariable=threshold_var, width=5, font=commonFont)  # 閾値設定
 threshold_spinbox.pack(pady=5)
 
 # 操作ボタン
-start_button = Button(root, text="Start", command=start_pressed, height=2, width=20)  # スタートボタン
+start_button = Button(root, text="Start", command=start_pressed, height=2, width=20, font=commonFont)  # スタートボタン
 start_button.pack(pady=5)
 
-reset_button = Button(root, text="Reset", command=send_reset_command, height=2, width=20)  # リセットボタン
+reset_button = Button(root, text="Reset", command=send_reset_command, height=2, width=20, font=commonFont)  # リセットボタン
 reset_button.pack(pady=5)
 
+# 終了ボタン
+exit_all_button = Button(root, text="ExitAll", command=exit_all, width=5, height=1)
+exit_all_button.place(relx=1.0, rely=0.0, anchor="ne", x=-5, y=5)
+
 # タイマー表示用ラベル
-timer_label = Label(root, text="Elapsed Time: 00:00", font=("Helvetica", 14)) # 経過時間表示ラベル
+timer_label = Label(root, text="Elapsed Time: 00:00", font=commonFont) # 経過時間表示ラベル
 timer_label.pack(pady=10)
 
 # ステータス表示

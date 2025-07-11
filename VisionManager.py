@@ -77,6 +77,10 @@ def receive_from_blackboard():
                 elif msg == "stop_log_recording":
                     stop_log_recording()
                     print("[VM] ログ記録終了")
+                elif msg == "CMD;shutdown":
+                    print("[VM] shutdown コマンドを受信しました。ログを保存してから終了します。")
+                    stop_log_recording()
+                    os._exit(0)
         except Exception as e:
             print(f"[VM] 受信中の例外: {e}")
             break
@@ -130,7 +134,7 @@ def stop_log_recording():
     # IDとCondを取得
     ID = landmark_log["experiment_info"].get("ID")
     Cond = landmark_log["experiment_info"].get("Cond")
-    
+
     # HandLandmarkログの保存
     landmark_log_dir = "Log/HandLandmarkLog"
     os.makedirs(landmark_log_dir, exist_ok=True)  # ディレクトリが無ければ作成

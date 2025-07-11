@@ -2,7 +2,8 @@ import socket                                  # ソケット通信のための�
 import threading                               # スレッド処理のための標準ライブラリ
 import serial.tools.list_ports                 # シリアルポートの列挙用ツール
 import serial                                  # PySerialライブラリ（Arduino通信用）
-import time                                    # 時間制御のための標準ライブラリ
+import time                                    # 時間制御のための標準ライブラ
+import os
 
 # --- BlackBoard通信設定 ---
 HOST = 'localhost'                             # BlackBoardサーバのホスト名
@@ -53,21 +54,32 @@ def receive_from_blackboard():
     global s, arduino
     while True:
         try:
-            msg = s.recv(1024).decode().strip()              # BlackBoardからメッセージを受信・デコード
+            msg = s.recv(1024).decode().strip()
             if msg:
-                print(f"[BlackBoard→{CLIENT_NAME}] {msg}")   # 受信内容を表示
-                content = msg                                # 内容をそのまま取り出す
-                print(f"[BM] コマンド抽出: {content}")        # コマンド内容の表示
-                if arduino and arduino.is_open:              # Arduinoに接続済みであれば
+                print(f"[BlackBoard→{CLIENT_NAME}] {msg}")
+                content = msg
+                print(f"[BM] コマンド抽出: {content}")
+
+                if content == "CMD;shutdown":
+                    print("[BM] shutdown コマンドを受信しました。プログラムを終了します。")
+                    if arduino:
+                        arduino.close()
+                        print("[BM] Arduinoとの接続を閉じました。")
+                    if s:
+                        s.close()
+                        print("[BM] BlackBoardとの接続を閉じました。")
+                    os._exit(0)
+
+                if arduino and arduino.is_open:
                     try:
-                        arduino.write((content + '\n').encode())  # 改行付きでArduinoに送信
-                        print(f"[Arduinoへ送信] {content}")   # 送信ログ表示
+                        arduino.write((content + '\n').encode())
+                        print(f"[Arduinoへ送信] {content}")
                     except Exception as e:
-                        print(f"[Arduino送信エラー] {e}")     # 送信失敗時のエラー表示
+                        print(f"[Arduino送信エラー] {e}")
                 else:
-                    print("[Arduino] 未接続のため送信できません")  # Arduino未接続時の警告
+                    print("[Arduino] 未接続のため送信できません")
         except Exception as e:
-            print(f"[BM] 受信処理エラー: {e}")                # BlackBoard受信中のエラー表示
+            print(f"[BM] 受信処理エラー: {e}")
             break
 
 # --- BlackBoardへの接続処理 ---

@@ -72,7 +72,7 @@ def send_exit_to_all_clients():                        # 全クライアント�
     logging.info("[CMD] 全クライアントにEXITを送信中...")
     for client_name, client_info in list(clients.items()):  # 接続中クライアントを走査
         try:
-            client_info["conn"].sendall(b"EXIT")       # 各クライアントにEXITを送信
+            client_info["conn"].sendall(b"CMD;shutdown\n")       # 各クライアントにEXITを送信
             logging.info(f"[CMD] {client_name} に EXIT を送信しました。")
         except Exception as e:
             logging.error(f"[CMD] {client_name} へのEXIT送信に失敗: {e}")
