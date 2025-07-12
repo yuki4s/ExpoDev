@@ -69,6 +69,18 @@ def receive_from_blackboard():
                         s.close()
                         print("[BM] BlackBoardとの接続を閉じました。")
                     os._exit(0)
+                
+                if content == "BM;emergency_stop":
+                    print("[BM] 緊急停止コマンドを受信しました。Arduinoに伝達します。")
+                    if arduino and arduino.is_open:
+                        try:
+                            arduino.write(b"emergency_stop\n")
+                            print("[BM] Arduinoに emergency_stop を送信しました。")
+                        except Exception as e:
+                            print(f"[BM] Arduino送信エラー（緊急停止）: {e}")
+                    else:
+                        print("[BM] Arduinoが未接続のため、緊急停止を送信できませんでした。")
+                    continue
 
                 if arduino and arduino.is_open:  # Arduinoが接続されていれば
                     try:

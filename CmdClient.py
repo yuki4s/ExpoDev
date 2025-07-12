@@ -128,6 +128,11 @@ reset_button.pack(pady=5)
 exit_all_button = Button(root, text="ExitAll", command=exit_all, width=5, height=1)
 exit_all_button.place(relx=1.0, rely=0.0, anchor="ne", x=-5, y=5)
 
+# 緊急停止ボタン
+emergency_button = Button(root, text="Emergency Stop", command=lambda: send_command("BM;emergency_stop"),
+                          height=1, width=14, font=commonFont, fg="white", bg="red")
+emergency_button.pack(pady=5)
+
 # タイマー表示用ラベル
 timer_label = Label(root, text="Elapsed Time: 00:00", font=commonFont) # 経過時間表示ラベル
 timer_label.pack(pady=10)
